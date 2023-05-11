@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import '../../util/helper/enum.dart';
 
 class BtnOAuth2Login extends StatefulWidget {
-  final double width;
-  final String name;
+  final double size;
+  final SocialEnum socialEnum;
   final Color backgroundColor;
 
   const BtnOAuth2Login(
       {super.key,
-      required this.width,
-      required this.name,
+      required this.size,
+      required this.socialEnum,
       required this.backgroundColor});
 
   @override
@@ -16,11 +17,24 @@ class BtnOAuth2Login extends StatefulWidget {
 }
 
 class _BtnOAuth2LoginState extends State<BtnOAuth2Login> {
+  Widget _getSocialIcon(SocialEnum socialEnum) {
+    switch (socialEnum) {
+      case SocialEnum.google:
+        return const Icon(Icons.g_mobiledata);
+      case SocialEnum.kakao:
+        return const Icon(Icons.key);
+      case SocialEnum.naver:
+        return const Icon(Icons.nature);
+      default:
+        return const Icon(Icons.question_mark);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.width,
-      height: 50,
+      width: widget.size,
+      height: widget.size,
       child: ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
@@ -31,7 +45,7 @@ class _BtnOAuth2LoginState extends State<BtnOAuth2Login> {
             foregroundColor: Colors.white,
             backgroundColor: widget.backgroundColor,
           ),
-          child: Text(widget.name)),
+          child: _getSocialIcon(widget.socialEnum)),
     );
   }
 }

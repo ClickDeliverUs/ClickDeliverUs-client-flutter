@@ -1,17 +1,23 @@
-import 'package:cd_client/datasource/auth_provide.dart';
+import 'dart:convert';
+import 'dart:io' show Platform;
 import 'package:cd_client/model/test_account.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class AuthRepository {
-  static final AuthRepository _instance = AuthRepository._internal();
-  final AuthProvide authProvide = AuthProvide();
+  final String serverURL = Platform.isIOS
+      ? dotenv.env['IOS_API_SERVER_ADDRESS']!
+      : dotenv.env['AND_API_SERVER_ADDRESS']!;
 
-  AuthRepository._internal();
+  Future<TestAccount> fetchLogin(String email, String credential) async {
+    final response = await http.post(Uri.parse("$serverURL/auth/signin"),
+        body: <String, dynamic>{"email": email, "credential": credential});
 
-  factory AuthRepository() {
-    return _instance;
-  }
-
-  Future<TestAccount> getUser(String email, String credential) {
-    return authProvide.fetchLogin(email, credential);
+    if (response.statusCode == 201) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      return TestAccount.fromJson(responseData);
+    } else {
+      throw Exception("Failed to load user data");
+    }
   }
 }
