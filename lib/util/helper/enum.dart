@@ -1,1 +1,1 @@
-enum SocialEnum { google, kakao, naver }
+enum SocialEnum { google, kakao, naver, apple }

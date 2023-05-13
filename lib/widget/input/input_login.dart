@@ -12,9 +12,9 @@ class InputLogin extends StatefulWidget {
 class _InputLoginState extends State<InputLogin> {
   Icon _getPrefixIcon(String name) {
     switch (name) {
-      case "email":
-        return const Icon(Icons.email);
-      case "password":
+      case "아이디":
+        return const Icon(Icons.perm_identity);
+      case "비밀번호":
         return const Icon(Icons.lock);
       default:
         return const Icon(Icons.question_mark);

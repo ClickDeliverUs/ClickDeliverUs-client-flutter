@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class BtnSubmit extends StatefulWidget {
   final double width;
+  final String name;
   final Color foregroundColor;
   final Color backgroundColor;
   final VoidCallback onPress;
@@ -9,6 +10,7 @@ class BtnSubmit extends StatefulWidget {
   const BtnSubmit(
       {super.key,
       required this.width,
+      required this.name,
       required this.foregroundColor,
       required this.backgroundColor,
       required this.onPress});
@@ -20,23 +22,20 @@ class BtnSubmit extends StatefulWidget {
 class _BtnSubmitState extends State<BtnSubmit> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.width,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () {
-          widget.onPress();
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          shadowColor: Colors.transparent,
-          foregroundColor: widget.foregroundColor,
-          backgroundColor: widget.backgroundColor,
+    return ElevatedButton(
+      onPressed: () {
+        widget.onPress();
+      },
+      style: ElevatedButton.styleFrom(
+        fixedSize: Size(widget.width, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
         ),
-        child: const Text("Login"),
+        shadowColor: Colors.transparent,
+        foregroundColor: widget.foregroundColor,
+        backgroundColor: widget.backgroundColor,
       ),
+      child: Text(widget.name),
     );
   }
 }

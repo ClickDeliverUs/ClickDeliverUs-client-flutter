@@ -1,9 +1,11 @@
 import 'package:cd_client/screen/home.dart';
+import 'package:cd_client/screen/register.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_oAuth2_login.dart';
 import 'package:cd_client/widget/button/btn_submit.dart';
 import 'package:cd_client/widget/input/input_login.dart';
+import 'package:flutter_svg/svg.dart';
 import '../util/helper/enum.dart';
 
 class Login extends StatefulWidget {
@@ -25,17 +27,23 @@ class _LoginState extends State<Login> {
         body: Center(
           child: Column(
             children: [
-              const SizedBox(
-                  height: 220,
-                  child: Align(
-                    alignment: Alignment(0, 0.5),
-                    child: Text(
-                      "ClickDeliverUs",
-                      style: TextStyle(
-                          color: CustomColor.indigo,
-                          fontSize: 45,
-                          fontWeight: FontWeight.bold),
-                    ),
+              SizedBox(
+                  height: 260,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Align(
+                        alignment: const Alignment(0.75, 0),
+                        child: SvgPicture.asset("assets/icons/main_icon.svg"),
+                      ),
+                      const Text(
+                        "ClickDeliverUs",
+                        style: TextStyle(
+                            color: CustomColor.indigo,
+                            fontSize: 45,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   )),
               Expanded(
                 child: Column(
@@ -47,10 +55,10 @@ class _LoginState extends State<Login> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: const [
                             InputLogin(
-                              name: "email",
+                              name: "아이디",
                             ),
                             InputLogin(
-                              name: "password",
+                              name: "비밀번호",
                             ),
                           ]),
                     ),
@@ -59,6 +67,7 @@ class _LoginState extends State<Login> {
                         child: Center(
                             child: BtnSubmit(
                                 width: deviceWidth,
+                                name: "로그인",
                                 foregroundColor: Colors.white,
                                 backgroundColor: CustomColor.indigo,
                                 onPress: () {
@@ -73,13 +82,13 @@ class _LoginState extends State<Login> {
                         child: Center(
                           child: Text(
                             "또는",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
+                            style: TextStyle(fontSize: 14),
                           ),
                         )),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    SizedBox(
+                      width: deviceWidth,
+                      height: 100,
+                      child: Center(
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -90,7 +99,7 @@ class _LoginState extends State<Login> {
                                       size: oAuthBtnSize,
                                       socialEnum: SocialEnum.google,
                                       backgroundColor: const Color.fromARGB(
-                                          255, 211, 95, 74),
+                                          255, 255, 255, 255),
                                     ),
                                   )),
                               SizedBox(
@@ -100,10 +109,39 @@ class _LoginState extends State<Login> {
                                       size: oAuthBtnSize,
                                       socialEnum: SocialEnum.kakao,
                                       backgroundColor: const Color.fromARGB(
-                                          255, 243, 226, 78),
+                                          255, 251, 233, 80),
+                                    ),
+                                  )),
+                              SizedBox(
+                                  height: 70,
+                                  child: Center(
+                                    child: BtnOAuth2Login(
+                                      size: oAuthBtnSize,
+                                      socialEnum: SocialEnum.apple,
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 255, 255, 255),
                                     ),
                                   )),
                             ]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("계정이 없으신가요?"),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.push<void>(
+                                      context,
+                                      MaterialPageRoute<void>(
+                                          builder: (BuildContext context) =>
+                                              const Register()));
+                                },
+                                child: const Text("가입하기"))
+                          ],
+                        ),
                       ),
                     )
                   ],

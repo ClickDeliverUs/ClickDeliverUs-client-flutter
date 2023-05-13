@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../../util/helper/enum.dart';
 
 class BtnOAuth2Login extends StatefulWidget {
@@ -17,35 +18,35 @@ class BtnOAuth2Login extends StatefulWidget {
 }
 
 class _BtnOAuth2LoginState extends State<BtnOAuth2Login> {
-  Widget _getSocialIcon(SocialEnum socialEnum) {
+  String _getSocialIcon(SocialEnum socialEnum) {
     switch (socialEnum) {
       case SocialEnum.google:
-        return const Icon(Icons.g_mobiledata);
+        return "assets/icons/google.svg";
       case SocialEnum.kakao:
-        return const Icon(Icons.key);
-      case SocialEnum.naver:
-        return const Icon(Icons.nature);
+        return "assets/icons/kakao.svg";
+      case SocialEnum.apple:
+        return "assets/icons/apple.svg";
       default:
-        return const Icon(Icons.question_mark);
+        return "";
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            shadowColor: Colors.transparent,
-            foregroundColor: Colors.white,
-            backgroundColor: widget.backgroundColor,
-          ),
-          child: _getSocialIcon(widget.socialEnum)),
-    );
+    return ElevatedButton(
+        onPressed: () {
+          print(widget.socialEnum);
+        },
+        style: ElevatedButton.styleFrom(
+          fixedSize: Size(widget.size, widget.size),
+          shape: const CircleBorder(),
+          shadowColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
+        ),
+        child: Center(
+            child: SvgPicture.asset(
+          _getSocialIcon(widget.socialEnum),
+          width: widget.size,
+        )));
   }
 }
