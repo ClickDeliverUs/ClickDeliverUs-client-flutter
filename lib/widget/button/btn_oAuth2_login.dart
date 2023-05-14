@@ -3,15 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import '../../util/helper/enum.dart';
 
 class BtnOAuth2Login extends StatefulWidget {
-  final double size;
   final SocialEnum socialEnum;
-  final Color backgroundColor;
 
-  const BtnOAuth2Login(
-      {super.key,
-      required this.size,
-      required this.socialEnum,
-      required this.backgroundColor});
+  const BtnOAuth2Login({
+    super.key,
+    required this.socialEnum,
+  });
 
   @override
   State<BtnOAuth2Login> createState() => _BtnOAuth2LoginState();
@@ -33,12 +30,13 @@ class _BtnOAuth2LoginState extends State<BtnOAuth2Login> {
 
   @override
   Widget build(BuildContext context) {
+    double size = 50;
     return ElevatedButton(
         onPressed: () {
           print(widget.socialEnum);
         },
         style: ElevatedButton.styleFrom(
-          fixedSize: Size(widget.size, widget.size),
+          fixedSize: Size(size, size),
           shape: const CircleBorder(),
           shadowColor: Colors.transparent,
           backgroundColor: Colors.transparent,
@@ -46,7 +44,7 @@ class _BtnOAuth2LoginState extends State<BtnOAuth2Login> {
         child: Center(
             child: SvgPicture.asset(
           _getSocialIcon(widget.socialEnum),
-          width: widget.size,
+          width: size,
         )));
   }
 }

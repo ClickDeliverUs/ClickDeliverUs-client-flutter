@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class BtnSubmit extends StatefulWidget {
-  final double width;
   final String name;
   final Color foregroundColor;
   final Color backgroundColor;
@@ -9,7 +8,6 @@ class BtnSubmit extends StatefulWidget {
 
   const BtnSubmit(
       {super.key,
-      required this.width,
       required this.name,
       required this.foregroundColor,
       required this.backgroundColor,
@@ -27,9 +25,9 @@ class _BtnSubmitState extends State<BtnSubmit> {
         widget.onPress();
       },
       style: ElevatedButton.styleFrom(
-        fixedSize: Size(widget.width, 50),
+        minimumSize: const Size(double.infinity, 50),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         shadowColor: Colors.transparent,
         foregroundColor: widget.foregroundColor,
