@@ -22,10 +22,10 @@ class _HomeState extends State<Home> {
               Navigator.pop(context);
             },
           )),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Center(
-            child: Column(children: const [Text("data")]),
+            child: Column(children: [Text("data")]),
           )),
     );
   }

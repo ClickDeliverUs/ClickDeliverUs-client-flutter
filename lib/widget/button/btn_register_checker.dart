@@ -20,7 +20,7 @@ class _BtnRegisterCheckerState extends State<BtnRegisterChecker> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: widget.value != "" ? widget.onPressed : () {},
+        onPressed: widget.value != "" ? widget.onPressed() : () {},
         style: ElevatedButton.styleFrom(
             minimumSize: const Size(100, 40),
             shape: RoundedRectangleBorder(

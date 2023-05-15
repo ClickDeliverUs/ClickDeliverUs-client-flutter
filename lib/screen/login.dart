@@ -1,11 +1,14 @@
+import 'package:cd_client/bloc/login_bloc.dart';
 import 'package:cd_client/screen/home.dart';
 import 'package:cd_client/screen/register.dart';
+import 'package:cd_client/util/constant/const_text.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_oAuth2_login.dart';
 import 'package:cd_client/widget/button/btn_submit.dart';
 import 'package:cd_client/widget/input/input_login.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import '../util/helper/enum.dart';
 
@@ -17,23 +20,18 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String inputId = "";
-  String inputPassword = "";
-
-  void setInputId(String value) {
-    setState(() {
-      inputId = value;
-    });
+  void setId(String value) {
+    context.read<LoginBlock>().add(LoginIdEvent(value));
   }
 
-  void setInputPassword(String value) {
-    setState(() {
-      inputPassword = value;
-    });
+  void setPassword(String value) {
+    context.read<LoginBlock>().add(LoginPasswordEvent(value));
   }
 
   @override
   Widget build(BuildContext context) {
+    final LoginState state = context.watch<LoginBlock>().state;
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -69,13 +67,21 @@ class _LoginState extends State<Login> {
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InputLogin(
-                                name: "아이디",
-                                onChanged: setInputId,
+                              BlocBuilder<LoginBlock, LoginState>(
+                                builder: (context, state) {
+                                  return InputLogin(
+                                    name: ConstText.id,
+                                    onChanged: setId,
+                                  );
+                                },
                               ),
-                              InputLogin(
-                                name: "비밀번호",
-                                onChanged: setInputPassword,
+                              BlocBuilder<LoginBlock, LoginState>(
+                                builder: (context, state) {
+                                  return InputLogin(
+                                    name: ConstText.password,
+                                    onChanged: setPassword,
+                                  );
+                                },
                               ),
                             ]),
                       ),
@@ -101,12 +107,12 @@ class _LoginState extends State<Login> {
                               style: TextStyle(fontSize: 14),
                             ),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 100,
                         child: Center(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 BtnOAuth2Login(
                                   socialEnum: SocialEnum.google,
                                 ),

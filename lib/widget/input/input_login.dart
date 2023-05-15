@@ -1,9 +1,10 @@
+import 'package:cd_client/util/constant/const_text.dart';
 import 'package:flutter/material.dart';
 
 class InputLogin extends StatefulWidget {
   final String name;
-  final Function(String) onChanged;
   final double? width;
+  final Function(String) onChanged;
 
   const InputLogin(
       {super.key, required this.name, required this.onChanged, this.width});
@@ -13,14 +14,16 @@ class InputLogin extends StatefulWidget {
 }
 
 class _InputLoginState extends State<InputLogin> {
-  IconData _getPrefixIcon(String name) {
-    switch (name) {
-      case "아이디":
+  IconData _getPrefixIcon() {
+    switch (widget.name) {
+      case ConstText.id:
         return Icons.account_circle;
-      case "비밀번호":
+      case ConstText.password:
         return Icons.lock;
-      case "비밀번호 확인":
+      case ConstText.verifyPassword:
         return Icons.check;
+      case ConstText.nickName:
+        return Icons.face;
       default:
         return Icons.question_mark;
     }
@@ -29,24 +32,25 @@ class _InputLoginState extends State<InputLogin> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.width,
-      height: 60,
-      child: TextField(
-        onChanged: (value) => widget.onChanged(value),
-        obscureText:
-            widget.name == "비밀번호" || widget.name == "비밀번호 확인" ? true : false,
-        decoration: InputDecoration(
-            focusedBorder: InputBorder.none,
-            prefixIcon: Icon(_getPrefixIcon(widget.name)),
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: Colors.transparent)),
-            labelText: widget.name,
-            filled: true,
-            fillColor: const Color.fromARGB(255, 245, 245, 245)),
-        style: const TextStyle(fontSize: 14),
-      ),
-    );
+        width: widget.width,
+        height: 60,
+        child: TextField(
+          onChanged: (value) => widget.onChanged(value),
+          obscureText: widget.name == ConstText.password ||
+                  widget.name == ConstText.verifyPassword
+              ? true
+              : false,
+          decoration: InputDecoration(
+              focusedBorder: InputBorder.none,
+              prefixIcon: Icon(_getPrefixIcon()),
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Colors.transparent)),
+              labelText: widget.name,
+              filled: true,
+              fillColor: const Color.fromARGB(255, 245, 245, 245)),
+          style: const TextStyle(fontSize: 14),
+        ));
   }
 }
