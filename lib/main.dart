@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cd_client/screen/login.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'bloc/register_bloc.dart';
 
 void main() async {
@@ -18,8 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LoginBlock>(
-          create: (context) => LoginBlock(),
+        BlocProvider<LoginBloc>(
+          create: (context) => LoginBloc(),
         ),
         BlocProvider<RegisterBloc>(
           create: (context) => RegisterBloc(),

@@ -3,15 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../model/login_form.dart';
 
-class LoginBlock extends Bloc<LoginEvent, LoginState> {
-  LoginBlock() : super(LoginState(LoginForm.init())) {
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  LoginBloc() : super(LoginState(LoginForm.init())) {
     on<LoginIdEvent>((event, emit) {
       final updatedForm = state.loginForm.copyWith(id: event.idValue);
+      print("login id bloc: ${updatedForm.id}");
       emit(LoginState(updatedForm));
     });
     on<LoginPasswordEvent>((event, emit) {
       final updatedForm =
           state.loginForm.copyWith(password: event.passwordValue);
+      print("login password bloc: ${updatedForm.password}");
       emit(LoginState(updatedForm));
     });
   }

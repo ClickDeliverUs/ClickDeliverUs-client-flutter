@@ -1,12 +1,10 @@
 import 'package:cd_client/bloc/register_bloc.dart';
-import 'package:cd_client/model/register_form.dart';
 import 'package:cd_client/util/constant/const_text.dart';
-import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_register_checker.dart';
 import 'package:cd_client/widget/input/input_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../util/constant/custom_color.dart';
 import '../util/constant/standard.dart';
 
 class Register extends StatefulWidget {
@@ -17,8 +15,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  void setIsIdAvailable() {
-    String inputId = context.watch<RegisterBloc>().state.registerForm.id;
+  void setIsIdAvailable(String inputId) {
     bool condition = inputId != "asdf" ? true : false;
 
     context.read<RegisterBloc>().add(RegisterIsIdAvailableEvent(condition));
@@ -46,9 +43,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    final RegisterForm registerForm =
-        context.watch<RegisterBloc>().state.registerForm;
-
+    print("build register page");
     return Scaffold(
       appBar: AppBar(
         title: const Text("회원가입"),
@@ -76,34 +71,41 @@ class _RegisterState extends State<Register> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            BlocBuilder<RegisterBloc, RegisterState>(
-                              builder: (context, state) {
-                                return InputLogin(
-                                  name: ConstText.id,
-                                  width: 240,
-                                  onChanged: setId,
-                                );
-                              },
+                            InputLogin(
+                              name: ConstText.id,
+                              width: 240,
+                              icon: Icons.account_circle,
+                              onChanged: setId,
                             ),
-                            // error here
-                            BlocBuilder<RegisterBloc, RegisterState>(
+                            BlocSelector<RegisterBloc, RegisterState, String>(
+                              selector: (state) => state.registerForm.id,
                               builder: (context, state) {
                                 return BtnRegisterChecker(
                                     name: "중복확인",
-                                    value: state.registerForm.id,
-                                    onPressed: setIsIdAvailable);
+                                    value: state,
+                                    onPressed: () => setIsIdAvailable(state));
                               },
                             )
                           ]),
                     ),
-                    if (registerForm.isIdAvailable == true)
-                      const Text("사용 가능한 아이디입니다.",
-                          style: TextStyle(color: CustomColor.indigo))
-                    else if (registerForm.isIdAvailable == false)
-                      const Text(
-                        "중복된 아이디입니다.",
-                        style: TextStyle(color: Colors.red),
-                      )
+                    BlocSelector<RegisterBloc, RegisterState, bool?>(
+                      selector: (state) => state.registerForm.isIdAvailable,
+                      builder: (context, state) {
+                        if (state == true) {
+                          return const Text(
+                            "사용 가능한 아이디입니다.",
+                            style: TextStyle(color: CustomColor.indigo),
+                          );
+                        } else if (state == false) {
+                          return const Text(
+                            "중복된 아이디입니다.",
+                            style: TextStyle(color: Colors.red),
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    )
                   ],
                 )),
             SizedBox(
@@ -114,30 +116,32 @@ class _RegisterState extends State<Register> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      BlocBuilder<RegisterBloc, RegisterState>(
-                        builder: (context, state) {
-                          return InputLogin(
-                            name: ConstText.password,
-                            onChanged: setPassword,
-                          );
-                        },
+                      InputLogin(
+                        name: ConstText.password,
+                        icon: Icons.lock,
+                        onChanged: setPassword,
                       ),
-                      BlocBuilder<RegisterBloc, RegisterState>(
-                        builder: (context, state) {
-                          return InputLogin(
-                            name: ConstText.verifyPassword,
-                            onChanged: setVerifyPassword,
-                          );
-                        },
+                      InputLogin(
+                        name: ConstText.verifyPassword,
+                        icon: Icons.check,
+                        onChanged: setVerifyPassword,
                       ),
                     ],
                   ),
                 ),
-                if (registerForm.password != registerForm.verifyPassword)
-                  const Text(
-                    "비밀번호가 일치하지 않습니다.",
-                    style: TextStyle(color: Colors.red),
-                  )
+                BlocBuilder<RegisterBloc, RegisterState>(
+                  builder: (context, state) {
+                    if (state.registerForm.password !=
+                        state.registerForm.verifyPassword) {
+                      return const Text(
+                        "비밀번호가 일치하지 않습니다.",
+                        style: TextStyle(color: Colors.red),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                )
               ]),
             ),
             Container(
@@ -146,13 +150,10 @@ class _RegisterState extends State<Register> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    BlocBuilder<RegisterBloc, RegisterState>(
-                      builder: (context, state) {
-                        return InputLogin(
-                          name: ConstText.nickName,
-                          onChanged: setNickName,
-                        );
-                      },
+                    InputLogin(
+                      name: ConstText.nickName,
+                      icon: Icons.face,
+                      onChanged: setNickName,
                     ),
                   ]),
             )

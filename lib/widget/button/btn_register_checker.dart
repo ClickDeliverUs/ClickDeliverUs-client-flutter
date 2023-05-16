@@ -20,14 +20,14 @@ class _BtnRegisterCheckerState extends State<BtnRegisterChecker> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: widget.value != "" ? widget.onPressed() : () {},
+        onPressed: widget.value == "" ? null : widget.onPressed,
         style: ElevatedButton.styleFrom(
             minimumSize: const Size(100, 40),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
             backgroundColor:
-                widget.value != "" ? CustomColor.indigo : Colors.grey),
+                widget.value == "" ? Colors.grey : CustomColor.indigo),
         child: Text(widget.name));
   }
 }

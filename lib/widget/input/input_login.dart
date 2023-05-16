@@ -4,31 +4,21 @@ import 'package:flutter/material.dart';
 class InputLogin extends StatefulWidget {
   final String name;
   final double? width;
+  final IconData icon;
   final Function(String) onChanged;
 
   const InputLogin(
-      {super.key, required this.name, required this.onChanged, this.width});
+      {super.key,
+      required this.name,
+      this.width,
+      required this.icon,
+      required this.onChanged});
 
   @override
   State<InputLogin> createState() => _InputLoginState();
 }
 
 class _InputLoginState extends State<InputLogin> {
-  IconData _getPrefixIcon() {
-    switch (widget.name) {
-      case ConstText.id:
-        return Icons.account_circle;
-      case ConstText.password:
-        return Icons.lock;
-      case ConstText.verifyPassword:
-        return Icons.check;
-      case ConstText.nickName:
-        return Icons.face;
-      default:
-        return Icons.question_mark;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -42,7 +32,7 @@ class _InputLoginState extends State<InputLogin> {
               : false,
           decoration: InputDecoration(
               focusedBorder: InputBorder.none,
-              prefixIcon: Icon(_getPrefixIcon()),
+              prefixIcon: Icon(widget.icon),
               floatingLabelBehavior: FloatingLabelBehavior.never,
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),

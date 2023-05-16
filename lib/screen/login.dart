@@ -1,15 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:cd_client/bloc/login_bloc.dart';
 import 'package:cd_client/screen/home.dart';
 import 'package:cd_client/screen/register.dart';
 import 'package:cd_client/util/constant/const_text.dart';
 import 'package:cd_client/util/constant/standard.dart';
-import 'package:flutter/material.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_oAuth2_login.dart';
 import 'package:cd_client/widget/button/btn_submit.dart';
 import 'package:cd_client/widget/input/input_login.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import '../util/helper/enum.dart';
 
 class Login extends StatefulWidget {
@@ -21,17 +21,16 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   void setId(String value) {
-    context.read<LoginBlock>().add(LoginIdEvent(value));
+    context.read<LoginBloc>().add(LoginIdEvent(value));
   }
 
   void setPassword(String value) {
-    context.read<LoginBlock>().add(LoginPasswordEvent(value));
+    context.read<LoginBloc>().add(LoginPasswordEvent(value));
   }
 
   @override
   Widget build(BuildContext context) {
-    final LoginState state = context.watch<LoginBlock>().state;
-
+    print("build login page");
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -67,22 +66,16 @@ class _LoginState extends State<Login> {
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              BlocBuilder<LoginBlock, LoginState>(
-                                builder: (context, state) {
-                                  return InputLogin(
-                                    name: ConstText.id,
-                                    onChanged: setId,
-                                  );
-                                },
+                              InputLogin(
+                                name: ConstText.id,
+                                icon: Icons.account_circle,
+                                onChanged: setId,
                               ),
-                              BlocBuilder<LoginBlock, LoginState>(
-                                builder: (context, state) {
-                                  return InputLogin(
-                                    name: ConstText.password,
-                                    onChanged: setPassword,
-                                  );
-                                },
-                              ),
+                              InputLogin(
+                                name: ConstText.password,
+                                icon: Icons.lock,
+                                onChanged: setPassword,
+                              )
                             ]),
                       ),
                       SizedBox(
