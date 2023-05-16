@@ -3,7 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:cd_client/screen/login.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:logger/logger.dart';
 import 'bloc/register_bloc.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(lineLength: 60, colors: true),
+);
+
+var loggerNoStack = Logger(
+  printer: PrettyPrinter(lineLength: 60, methodCount: 0),
+);
 
 void main() async {
   await dotenv.load();

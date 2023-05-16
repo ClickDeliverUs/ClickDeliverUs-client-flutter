@@ -1,3 +1,4 @@
+import 'package:cd_client/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,9 +29,28 @@ class _LoginState extends State<Login> {
     context.read<LoginBloc>().add(LoginPasswordEvent(value));
   }
 
+  void eventFactory(String name, String value) {
+    LoginEvent loginEvent;
+
+    switch (name) {
+      case ConstText.id:
+        loginEvent = LoginIdEvent(value);
+        break;
+      case ConstText.password:
+        loginEvent = LoginPasswordEvent(value);
+        break;
+
+      default:
+        loginEvent = LoginResetEvent();
+        break;
+    }
+
+    context.read<LoginBloc>().add(loginEvent);
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("build login page");
+    loggerNoStack.i("build login page");
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -69,12 +89,12 @@ class _LoginState extends State<Login> {
                               InputLogin(
                                 name: ConstText.id,
                                 icon: Icons.account_circle,
-                                onChanged: setId,
+                                onChanged: eventFactory,
                               ),
                               InputLogin(
                                 name: ConstText.password,
                                 icon: Icons.lock,
-                                onChanged: setPassword,
+                                onChanged: eventFactory,
                               )
                             ]),
                       ),

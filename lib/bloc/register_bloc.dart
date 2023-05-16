@@ -1,42 +1,61 @@
 import 'package:bloc/bloc.dart';
+import 'package:cd_client/main.dart';
 import 'package:cd_client/model/register_form.dart';
 import 'package:equatable/equatable.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc() : super(RegisterState(RegisterForm.init())) {
-    on<RegisterIdEvent>((event, emit) {
-      final updatedForm = state.registerForm.copyWith(id: event.idValue);
-      print("register id bloc: ${updatedForm.id}");
-      emit(RegisterState(updatedForm));
-    });
-    on<RegisterPasswordEvent>((event, emit) {
-      final updatedForm =
-          state.registerForm.copyWith(password: event.passwordValue);
-      print("register password bloc: ${updatedForm.password}");
-      emit(RegisterState(updatedForm));
-    });
-    on<RegisterVerifyPasswordEvent>((event, emit) {
-      final updatedForm = state.registerForm
+    on<RegisterIdEvent>((event, emit) => registerEventFactory(event, emit));
+    on<RegisterPasswordEvent>(
+        (event, emit) => registerEventFactory(event, emit));
+    on<RegisterVerifyPasswordEvent>(
+        (event, emit) => registerEventFactory(event, emit));
+    on<RegisterNickNameEvent>(
+        (event, emit) => registerEventFactory(event, emit));
+    on<RegisterIsIdAvailableEvent>(
+        (event, emit) => registerEventFactory(event, emit));
+    on<RegisterResetEvent>((event, emit) => registerEventFactory(event, emit));
+  }
+
+  void registerEventFactory(RegisterEvent event, Emitter<RegisterState> emit) {
+    late RegisterForm registerForm;
+
+    if (event is RegisterIdEvent) {
+      registerForm = state.registerForm.copyWith(id: event.idValue);
+      loggerNoStack.i("register id bloc: ${registerForm.id}");
+    } else if (event is RegisterPasswordEvent) {
+      registerForm = state.registerForm.copyWith(password: event.passwordValue);
+      loggerNoStack.i("register password bloc: ${registerForm.password}");
+    } else if (event is RegisterVerifyPasswordEvent) {
+      registerForm = state.registerForm
           .copyWith(verifyPassword: event.verifyPasswordValue);
-      print("register verifyPassword bloc: ${updatedForm.verifyPassword}");
-      emit(RegisterState(updatedForm));
-    });
-    on<RegisterNickNameEvent>((event, emit) {
-      final updatedForm =
-          state.registerForm.copyWith(nickName: event.nickNameValue);
-      print("register nickName bloc: ${updatedForm.nickName}");
-      emit(RegisterState(updatedForm));
-    });
-    on<RegisterIsIdAvailableEvent>((event, emit) {
-      final updatedForm =
+      loggerNoStack
+          .i("register verifyPassword bloc: ${registerForm.verifyPassword}");
+    } else if (event is RegisterNickNameEvent) {
+      registerForm = state.registerForm.copyWith(nickName: event.nickNameValue);
+      loggerNoStack.i("register nickName bloc: ${registerForm.nickName}");
+    } else if (event is RegisterIsIdAvailableEvent) {
+      registerForm =
           state.registerForm.copyWith(isIdAvailable: event.isIdAvailable);
-      print("register isIdAvailable bloc: ${updatedForm.isIdAvailable}");
-      emit(RegisterState(updatedForm));
-    });
+      loggerNoStack
+          .i("register isIdAvailable bloc: ${registerForm.isIdAvailable}");
+    } else if (event is RegisterResetEvent) {
+      registerForm = RegisterForm.init();
+      loggerNoStack.i("reset register states");
+    }
+
+    emit(RegisterState(registerForm));
   }
 }
 
 abstract class RegisterEvent extends Equatable {}
+
+class RegisterResetEvent extends RegisterEvent {
+  RegisterResetEvent();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class RegisterIdEvent extends RegisterEvent {
   final String idValue;

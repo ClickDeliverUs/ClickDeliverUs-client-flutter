@@ -5,7 +5,7 @@ class InputLogin extends StatefulWidget {
   final String name;
   final double? width;
   final IconData icon;
-  final Function(String) onChanged;
+  final Function(String, String) onChanged;
 
   const InputLogin(
       {super.key,
@@ -25,7 +25,7 @@ class _InputLoginState extends State<InputLogin> {
         width: widget.width,
         height: 60,
         child: TextField(
-          onChanged: (value) => widget.onChanged(value),
+          onChanged: (value) => widget.onChanged(widget.name, value),
           obscureText: widget.name == ConstText.password ||
                   widget.name == ConstText.verifyPassword
               ? true

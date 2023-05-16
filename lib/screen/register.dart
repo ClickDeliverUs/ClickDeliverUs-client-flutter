@@ -4,6 +4,7 @@ import 'package:cd_client/widget/button/btn_register_checker.dart';
 import 'package:cd_client/widget/input/input_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../main.dart';
 import '../util/constant/custom_color.dart';
 import '../util/constant/standard.dart';
 
@@ -21,29 +22,33 @@ class _RegisterState extends State<Register> {
     context.read<RegisterBloc>().add(RegisterIsIdAvailableEvent(condition));
   }
 
-  void setId(String value) {
-    context.read<RegisterBloc>().add(RegisterIdEvent(value));
-  }
+  void eventFactory(String name, String value) {
+    RegisterEvent registerEvent;
 
-  void setPassword(String value) {
-    context.read<RegisterBloc>().add(RegisterPasswordEvent(value));
-  }
+    switch (name) {
+      case ConstText.id:
+        registerEvent = RegisterIdEvent(value);
+        break;
+      case ConstText.password:
+        registerEvent = RegisterPasswordEvent(value);
+        break;
+      case ConstText.verifyPassword:
+        registerEvent = RegisterVerifyPasswordEvent(value);
+        break;
+      case ConstText.nickName:
+        registerEvent = RegisterNickNameEvent(value);
+        break;
+      default:
+        registerEvent = RegisterResetEvent();
+        break;
+    }
 
-  void setVerifyPassword(String value) {
-    context.read<RegisterBloc>().add(RegisterVerifyPasswordEvent(value));
-  }
-
-  void setNickName(String value) {
-    context.read<RegisterBloc>().add(RegisterNickNameEvent(value));
-  }
-
-  void eventHandler(RegisterEvent event) {
-    context.read<RegisterBloc>().add(event);
+    context.read<RegisterBloc>().add(registerEvent);
   }
 
   @override
   Widget build(BuildContext context) {
-    print("build register page");
+    loggerNoStack.i("build register page");
     return Scaffold(
       appBar: AppBar(
         title: const Text("회원가입"),
@@ -75,7 +80,7 @@ class _RegisterState extends State<Register> {
                               name: ConstText.id,
                               width: 240,
                               icon: Icons.account_circle,
-                              onChanged: setId,
+                              onChanged: eventFactory,
                             ),
                             BlocSelector<RegisterBloc, RegisterState, String>(
                               selector: (state) => state.registerForm.id,
@@ -119,12 +124,12 @@ class _RegisterState extends State<Register> {
                       InputLogin(
                         name: ConstText.password,
                         icon: Icons.lock,
-                        onChanged: setPassword,
+                        onChanged: eventFactory,
                       ),
                       InputLogin(
                         name: ConstText.verifyPassword,
                         icon: Icons.check,
-                        onChanged: setVerifyPassword,
+                        onChanged: eventFactory,
                       ),
                     ],
                   ),
@@ -153,7 +158,7 @@ class _RegisterState extends State<Register> {
                     InputLogin(
                       name: ConstText.nickName,
                       icon: Icons.face,
-                      onChanged: setNickName,
+                      onChanged: eventFactory,
                     ),
                   ]),
             )
