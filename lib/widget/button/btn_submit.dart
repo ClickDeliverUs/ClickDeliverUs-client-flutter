@@ -1,39 +1,33 @@
+import 'package:cd_client/util/constant/standard.dart';
 import 'package:flutter/material.dart';
 
-class BtnSubmit extends StatefulWidget {
+class BtnSubmit extends StatelessWidget {
   final String name;
   final Color foregroundColor;
   final Color backgroundColor;
-  final VoidCallback onPress;
+  final VoidCallback onPressed;
 
   const BtnSubmit(
       {super.key,
       required this.name,
       required this.foregroundColor,
       required this.backgroundColor,
-      required this.onPress});
+      required this.onPressed});
 
-  @override
-  State<BtnSubmit> createState() => _BtnSubmitState();
-}
-
-class _BtnSubmitState extends State<BtnSubmit> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        widget.onPress();
-      },
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         minimumSize: const Size(double.infinity, 50),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(Standard.defaultBorderRadius),
         ),
         shadowColor: Colors.transparent,
-        foregroundColor: widget.foregroundColor,
-        backgroundColor: widget.backgroundColor,
+        foregroundColor: foregroundColor,
+        backgroundColor: backgroundColor,
       ),
-      child: Text(widget.name),
+      child: Text(name),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:cd_client/bloc/login_bloc.dart';
+import 'package:cd_client/screen/index.dart';
 import 'package:flutter/material.dart';
-import 'package:cd_client/screen/login.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
@@ -36,12 +36,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: "Flutter Tutorial",
           theme: ThemeData(
-              fontFamily: "KCC-Ganpan",
+              fontFamily: "KBO",
               appBarTheme: const AppBarTheme(
                   color: Colors.white,
                   elevation: 0,
                   foregroundColor: Colors.black)),
-          home: const Login()),
+          home: const Index()),
     );
   }
 }

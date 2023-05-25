@@ -1,3 +1,3 @@
-enum SocialEnum { google, kakao, naver, apple }
+enum SocialEnum { google, kakao, naver, apple, facebook }
 
 enum Route { login, register }

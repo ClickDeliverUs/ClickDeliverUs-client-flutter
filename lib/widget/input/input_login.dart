@@ -1,11 +1,12 @@
 import 'package:cd_client/util/constant/const_text.dart';
+import 'package:cd_client/util/constant/standard.dart';
 import 'package:flutter/material.dart';
 
-class InputLogin extends StatefulWidget {
+class InputLogin extends StatelessWidget {
   final String name;
   final double? width;
   final IconData icon;
-  final Function(String, String) onChanged;
+  final Function onChanged;
 
   const InputLogin(
       {super.key,
@@ -15,32 +16,29 @@ class InputLogin extends StatefulWidget {
       required this.onChanged});
 
   @override
-  State<InputLogin> createState() => _InputLoginState();
-}
-
-class _InputLoginState extends State<InputLogin> {
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: widget.width,
-        height: 60,
-        child: TextField(
-          onChanged: (value) => widget.onChanged(widget.name, value),
-          obscureText: widget.name == ConstText.password ||
-                  widget.name == ConstText.verifyPassword
-              ? true
-              : false,
-          decoration: InputDecoration(
-              focusedBorder: InputBorder.none,
-              prefixIcon: Icon(widget.icon),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(color: Colors.transparent)),
-              labelText: widget.name,
-              filled: true,
-              fillColor: const Color.fromARGB(255, 245, 245, 245)),
-          style: const TextStyle(fontSize: 14),
-        ));
+      width: width,
+      child: TextField(
+        onChanged: (value) => onChanged(name, value),
+        obscureText:
+            name == ConstText.password || name == ConstText.verifyPassword
+                ? true
+                : false,
+        decoration: InputDecoration(
+            focusedBorder: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(vertical: 24),
+            prefixIcon: Icon(icon),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Standard.defaultBorderRadius),
+              borderSide: const BorderSide(color: Colors.transparent),
+            ),
+            hintText: name,
+            filled: true,
+            fillColor: const Color.fromARGB(255, 245, 245, 245)),
+        style: const TextStyle(fontSize: 16),
+      ),
+    );
   }
 }

@@ -84,6 +84,10 @@ flutter:
     - family: KCC-Ganpan
       fonts:
         - asset: assets/fonts/KCC-Ganpan.otf
+    - family: KBO
+      fonts:
+        - asset: assets/fonts/KBO-Bold.otf
+        - asset: assets/fonts/KBO-Regular.otf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

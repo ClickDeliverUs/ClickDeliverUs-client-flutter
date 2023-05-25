@@ -4,9 +4,9 @@ import 'package:cd_client/widget/button/btn_register_checker.dart';
 import 'package:cd_client/widget/input/input_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../main.dart';
 import '../util/constant/custom_color.dart';
 import '../util/constant/standard.dart';
+import '../main.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -55,7 +55,7 @@ class _RegisterState extends State<Register> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -71,7 +71,7 @@ class _RegisterState extends State<Register> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 40),
+                      padding: const EdgeInsets.only(top: 40, bottom: 10),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
