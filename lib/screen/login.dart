@@ -1,8 +1,6 @@
 import 'package:cd_client/main.dart';
 import 'package:cd_client/widget/button/btn_auth_options.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cd_client/bloc/login_bloc.dart';
 import 'package:cd_client/util/constant/const_text.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
@@ -17,27 +15,26 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  void eventFactory(String name, String value) {
-    LoginEvent loginEvent;
+  String id = "";
+  String password = "";
+  String passwordVerify = "";
 
-    switch (name) {
-      case ConstText.id:
-        loginEvent = LoginIdEvent(value);
-        break;
-      case ConstText.password:
-        loginEvent = LoginPasswordEvent(value);
-        break;
-      default:
-        loginEvent = LoginResetEvent();
-        break;
-    }
+  void setId(String value) {
+    setState(() {
+      id = value;
+    });
+  }
 
-    context.read<LoginBloc>().add(loginEvent);
+  void setPassword(String value) {
+    setState(() {
+      password = value;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     loggerNoStack.i("build login page");
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -61,13 +58,11 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InputLogin(
-                    name: ConstText.id,
-                    icon: Icons.email,
-                    onChanged: eventFactory),
+                    name: ConstText.id, icon: Icons.email, onChanged: setId),
                 InputLogin(
                     name: ConstText.password,
                     icon: Icons.lock,
-                    onChanged: eventFactory),
+                    onChanged: setPassword),
                 BtnSubmit(
                     name: "로그인",
                     backgroundColor: CustomColor.indigo,

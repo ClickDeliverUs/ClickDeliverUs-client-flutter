@@ -1,9 +1,7 @@
-import 'package:cd_client/bloc/register_bloc.dart';
 import 'package:cd_client/util/constant/const_text.dart';
 import 'package:cd_client/widget/button/btn_register_checker.dart';
 import 'package:cd_client/widget/input/input_login.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../util/constant/custom_color.dart';
 import '../util/constant/standard.dart';
 import '../main.dart';
@@ -16,39 +14,46 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  void setIsIdAvailable(String inputId) {
-    bool condition = inputId != "asdf" ? true : false;
+  String id = "";
+  String password = "";
+  String passwordVerify = "";
+  String nickName = "";
+  bool? isIdAvailable;
 
-    context.read<RegisterBloc>().add(RegisterIsIdAvailableEvent(condition));
+  void setId(String value) {
+    setState(() {
+      id = value;
+    });
   }
 
-  void eventFactory(String name, String value) {
-    RegisterEvent registerEvent;
+  void setPassword(String value) {
+    setState(() {
+      password = value;
+    });
+  }
 
-    switch (name) {
-      case ConstText.id:
-        registerEvent = RegisterIdEvent(value);
-        break;
-      case ConstText.password:
-        registerEvent = RegisterPasswordEvent(value);
-        break;
-      case ConstText.verifyPassword:
-        registerEvent = RegisterVerifyPasswordEvent(value);
-        break;
-      case ConstText.nickName:
-        registerEvent = RegisterNickNameEvent(value);
-        break;
-      default:
-        registerEvent = RegisterResetEvent();
-        break;
-    }
+  void setPasswordVerify(String value) {
+    setState(() {
+      passwordVerify = value;
+    });
+  }
 
-    context.read<RegisterBloc>().add(registerEvent);
+  void setNickName(String value) {
+    setState(() {
+      nickName = value;
+    });
+  }
+
+  void idValidation() {
+    setState(() {
+      isIdAvailable = id != "asdf" ? true : false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     loggerNoStack.i("build register page");
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("회원가입"),
@@ -80,73 +85,54 @@ class _RegisterState extends State<Register> {
                               name: ConstText.id,
                               width: 240,
                               icon: Icons.account_circle,
-                              onChanged: eventFactory,
+                              onChanged: setId,
                             ),
-                            BlocSelector<RegisterBloc, RegisterState, String>(
-                              selector: (state) => state.registerForm.id,
-                              builder: (context, state) {
-                                return BtnRegisterChecker(
-                                    name: "중복확인",
-                                    value: state,
-                                    onPressed: () => setIsIdAvailable(state));
-                              },
-                            )
+                            BtnRegisterChecker(
+                                name: "중복확인",
+                                value: id,
+                                onPressed: idValidation)
                           ]),
                     ),
-                    BlocSelector<RegisterBloc, RegisterState, bool?>(
-                      selector: (state) => state.registerForm.isIdAvailable,
-                      builder: (context, state) {
-                        if (state == true) {
-                          return const Text(
+                    (isIdAvailable == true)
+                        ? const Text(
                             "사용 가능한 아이디입니다.",
                             style: TextStyle(color: CustomColor.indigo),
-                          );
-                        } else if (state == false) {
-                          return const Text(
-                            "중복된 아이디입니다.",
-                            style: TextStyle(color: Colors.red),
-                          );
-                        } else {
-                          return const SizedBox();
-                        }
-                      },
-                    )
+                          )
+                        : (isIdAvailable == false)
+                            ? const Text(
+                                "중복된 아이디입니다.",
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : const SizedBox()
                   ],
                 )),
             SizedBox(
               height: 180,
               child: Column(children: [
                 SizedBox(
-                  height: 150,
+                  height: 160,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       InputLogin(
                         name: ConstText.password,
                         icon: Icons.lock,
-                        onChanged: eventFactory,
+                        onChanged: setPassword,
                       ),
                       InputLogin(
                         name: ConstText.verifyPassword,
                         icon: Icons.check,
-                        onChanged: eventFactory,
+                        onChanged: setPasswordVerify,
                       ),
                     ],
                   ),
                 ),
-                BlocBuilder<RegisterBloc, RegisterState>(
-                  builder: (context, state) {
-                    if (state.registerForm.password !=
-                        state.registerForm.verifyPassword) {
-                      return const Text(
+                (password != passwordVerify)
+                    ? const Text(
                         "비밀번호가 일치하지 않습니다.",
                         style: TextStyle(color: Colors.red),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                )
+                      )
+                    : const SizedBox()
               ]),
             ),
             Container(
@@ -158,7 +144,7 @@ class _RegisterState extends State<Register> {
                     InputLogin(
                       name: ConstText.nickName,
                       icon: Icons.face,
-                      onChanged: eventFactory,
+                      onChanged: setNickName,
                     ),
                   ]),
             )

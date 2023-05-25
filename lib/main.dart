@@ -1,10 +1,7 @@
-import 'package:cd_client/bloc/login_bloc.dart';
 import 'package:cd_client/screen/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
-import 'bloc/register_bloc.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(lineLength: 60, colors: true),
@@ -24,24 +21,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<LoginBloc>(
-          create: (context) => LoginBloc(),
-        ),
-        BlocProvider<RegisterBloc>(
-          create: (context) => RegisterBloc(),
-        )
-      ],
-      child: MaterialApp(
-          title: "Flutter Tutorial",
-          theme: ThemeData(
-              fontFamily: "KBO",
-              appBarTheme: const AppBarTheme(
-                  color: Colors.white,
-                  elevation: 0,
-                  foregroundColor: Colors.black)),
-          home: const Index()),
-    );
+    return MaterialApp(
+        title: "Flutter Tutorial",
+        theme: ThemeData(
+            fontFamily: "KBO",
+            appBarTheme: const AppBarTheme(
+                color: Colors.white,
+                elevation: 0,
+                foregroundColor: Colors.black)),
+        home: const Index());
   }
 }

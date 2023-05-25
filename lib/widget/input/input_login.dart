@@ -20,7 +20,7 @@ class InputLogin extends StatelessWidget {
     return SizedBox(
       width: width,
       child: TextField(
-        onChanged: (value) => onChanged(name, value),
+        onChanged: (value) => onChanged(value),
         obscureText:
             name == ConstText.password || name == ConstText.verifyPassword
                 ? true
