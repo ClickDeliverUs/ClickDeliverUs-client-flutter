@@ -9,4 +9,6 @@ class CustomColor {
   static const black = Color(0xFF262626);
   static const white = Color(0xFFF5FFF5);
   static const grey = Color(0xFFABABAB);
+  static const whiteGrey = Color(0xFFF5F5F5);
+  static const inputGrey = Color(0xFF676767);
 }

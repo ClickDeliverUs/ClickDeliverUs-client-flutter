@@ -6,6 +6,7 @@ import '../../util/helper/enum.dart';
 
 class BtnOAuth2Login extends StatefulWidget {
   final SocialEnum socialEnum;
+  // final VoidCallback onPressed;
 
   const BtnOAuth2Login({super.key, required this.socialEnum});
 
@@ -74,7 +75,7 @@ class _BtnOAuth2LoginState extends State<BtnOAuth2Login> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 7),
               child: SvgPicture.asset(
                 _socialIcon,
                 width: 20,

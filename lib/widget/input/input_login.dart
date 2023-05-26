@@ -1,17 +1,19 @@
-import 'package:cd_client/util/constant/const_text.dart';
+import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:flutter/material.dart';
 
 class InputLogin extends StatelessWidget {
   final String name;
-  final double? width;
   final IconData icon;
+  final double? width;
+  final bool? isPassword;
   final Function onChanged;
 
   const InputLogin(
       {super.key,
       required this.name,
       this.width,
+      this.isPassword,
       required this.icon,
       required this.onChanged});
 
@@ -21,10 +23,7 @@ class InputLogin extends StatelessWidget {
       width: width,
       child: TextField(
         onChanged: (value) => onChanged(value),
-        obscureText:
-            name == ConstText.password || name == ConstText.verifyPassword
-                ? true
-                : false,
+        obscureText: isPassword == true ? true : false,
         decoration: InputDecoration(
             focusedBorder: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(vertical: 24),
@@ -36,8 +35,8 @@ class InputLogin extends StatelessWidget {
             ),
             hintText: name,
             filled: true,
-            fillColor: const Color.fromARGB(255, 245, 245, 245)),
-        style: const TextStyle(fontSize: 16),
+            fillColor: CustomColor.whiteGrey),
+        style: const TextStyle(fontSize: 16, color: CustomColor.inputGrey),
       ),
     );
   }

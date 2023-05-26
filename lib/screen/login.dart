@@ -1,7 +1,6 @@
 import 'package:cd_client/main.dart';
 import 'package:cd_client/widget/button/btn_auth_options.dart';
 import 'package:flutter/material.dart';
-import 'package:cd_client/util/constant/const_text.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_submit.dart';
@@ -57,11 +56,11 @@ class _LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                InputLogin(name: "아이디", icon: Icons.email, onChanged: setId),
                 InputLogin(
-                    name: ConstText.id, icon: Icons.email, onChanged: setId),
-                InputLogin(
-                    name: ConstText.password,
+                    name: "비밀번호",
                     icon: Icons.lock,
+                    isPassword: true,
                     onChanged: setPassword),
                 BtnSubmit(
                     name: "로그인",
