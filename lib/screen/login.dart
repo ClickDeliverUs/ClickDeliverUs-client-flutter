@@ -29,20 +29,6 @@ class _LoginState extends State<Login> {
     }
   }
 
-  String? idValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '아이디를 입력해 주세요';
-    }
-    return null;
-  }
-
-  String? passwordValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '비밀번호를 입력해 주세요';
-    }
-    return null;
-  }
-
   @override
   void dispose() {
     _idController.dispose();

@@ -22,13 +22,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Flutter Tutorial",
-        theme: ThemeData(
-            fontFamily: "KBO",
-            appBarTheme: const AppBarTheme(
-                color: Colors.white,
-                elevation: 0,
-                foregroundColor: Colors.black)),
-        home: const Index());
+      title: "Flutter Tutorial",
+      theme: ThemeData(
+          fontFamily: "KBO",
+          appBarTheme: const AppBarTheme(
+              color: Colors.white,
+              elevation: 0,
+              foregroundColor: Colors.black)),
+      home: const Index(),
+    );
   }
 }

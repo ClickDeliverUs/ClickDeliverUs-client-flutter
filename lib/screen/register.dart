@@ -31,6 +31,18 @@ class _RegisterState extends State<Register> {
   bool isIdAvailable = false;
   late bool isPasswordMatches;
 
+  void setIsIdAvailable() {
+    setState(() {
+      isIdAvailable = true;
+    });
+  }
+
+  void setIsIdUnavailable() {
+    setState(() {
+      isIdAvailable = false;
+    });
+  }
+
   Future<void> setBirth(BuildContext context) async {
     DateTime? picked = await CommonHelper.datePicker(context, 1920, 2024);
 
@@ -41,28 +53,26 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  void idValidation(BuildContext context) {
-    // TODO: implement duplicate email checking request
-    String existPassword = "asdf";
-
-    if (_idController.text == existPassword) {
-      CommonHelper.showSnackBar(context, "중복된 아이디입니다");
-      setState(() {
-        isIdAvailable = false;
-      });
-    } else {
-      CommonHelper.showSnackBar(context, "사용 가능한 아이디입니다");
-      setState(() {
-        isIdAvailable = true;
-      });
-    }
-  }
-
   bool checkAdult(DateTime selectedDate) {
     DateTime currentDate = DateTime.now();
     Duration difference = currentDate.difference(selectedDate);
     int age = (difference.inDays / 365).floor();
     return age >= 18;
+  }
+
+  void idInputChanged() {
+    if (isIdAvailable == true) {
+      setIsIdUnavailable();
+    }
+  }
+
+  void passwordInputChanged() {
+    setState(() {
+      isPasswordMatches =
+          _passwordController.text == _passwordVerifyController.text
+              ? true
+              : false;
+    });
   }
 
   // TODO: implement submit form
@@ -89,23 +99,6 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  void idInputChanged() {
-    if (isIdAvailable == true) {
-      setState(() {
-        isIdAvailable = false;
-      });
-    }
-  }
-
-  void passwordInputChanged() {
-    setState(() {
-      isPasswordMatches =
-          _passwordController.text == _passwordVerifyController.text
-              ? true
-              : false;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -116,6 +109,10 @@ class _RegisterState extends State<Register> {
 
   @override
   void dispose() {
+    _idController.removeListener(idInputChanged);
+    _passwordController.removeListener(passwordInputChanged);
+    _passwordVerifyController.removeListener(passwordInputChanged);
+
     _idController.dispose();
     _passwordController.dispose();
     _passwordVerifyController.dispose();
@@ -124,16 +121,13 @@ class _RegisterState extends State<Register> {
     _addressController.dispose();
     _telController.dispose();
 
-    _idController.removeListener(idInputChanged);
-    _passwordController.removeListener(passwordInputChanged);
-    _passwordVerifyController.removeListener(passwordInputChanged);
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     loggerNoStack.i("build register page");
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -162,7 +156,9 @@ class _RegisterState extends State<Register> {
                       child: Text(
                         "계정 정보를 입력해 주세요",
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       )),
                 ),
                 SizedBox(
@@ -188,9 +184,9 @@ class _RegisterState extends State<Register> {
                             builder:
                                 (BuildContext context, value, Widget? child) {
                               return BtnRegisterChecker(
-                                  name: "중복확인",
                                   value: _idController.text,
-                                  onPressed: idValidation);
+                                  setIsIdAvailable: setIsIdAvailable,
+                                  setIsIdUnavailable: setIsIdUnavailable);
                             },
                           )
                         ],
