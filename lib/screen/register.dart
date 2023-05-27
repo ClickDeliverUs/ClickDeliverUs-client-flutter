@@ -1,6 +1,7 @@
+import 'package:cd_client/model/internal/register_form_model.dart';
 import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/widget/button/btn_register_checker.dart';
-import 'package:cd_client/widget/input/input_login.dart';
+import 'package:cd_client/widget/input/input_auth.dart';
 import 'package:cd_client/widget/picker/picker_auth.dart';
 import 'package:flutter/material.dart';
 import '../util/constant/custom_color.dart';
@@ -16,83 +17,79 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String _id = "";
-  String _password = "";
-  String _passwordVerify = "";
-  String _name = "";
-  String _nickName = "";
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordVerifyController =
+      TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nickNameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _telController = TextEditingController();
   DateTime? _birth;
-  String _address = "";
-  String _tel = "";
-  bool? _isIdAvailable;
-  bool? _isPasswordMatches;
+  bool isIdAvailable = false;
+  late bool isPasswordMatches;
 
-  void setId(String value) {
-    setState(() {
-      _id = value;
-    });
-  }
-
-  void setPassword(String value) {
-    setState(() {
-      _password = value;
-    });
-
-    if (_password == _passwordVerify) {
-      setState(() {
-        _isPasswordMatches = true;
-      });
-    } else {
-      setState(() {
-        _isPasswordMatches = false;
-      });
+  String? idValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return '아이디를 입력해 주세요';
     }
+
+    return null;
   }
 
-  void setPasswordVerify(String value) {
-    setState(() {
-      _passwordVerify = value;
-    });
-
-    if (_password == _passwordVerify) {
-      setState(() {
-        _isPasswordMatches = true;
-      });
-    } else {
-      setState(() {
-        _isPasswordMatches = false;
-      });
+  String? passwordValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return '비밀번호를 입력해 주세요';
     }
+
+    if (value == _passwordVerifyController.text) {
+      setState(() => isPasswordMatches = true);
+    } else {
+      setState(() => isPasswordMatches = false);
+      return "비밀번호가 일치하지 않습니다";
+    }
+    return null;
   }
 
-  void setName(String value) {
-    setState(() {
-      _name = value;
-    });
+  String? nameValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return '이름을 입력해 주세요';
+    }
+    return null;
   }
 
-  void setNickName(String value) {
-    setState(() {
-      _nickName = value;
-    });
+  String? nickNameValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return '닉네임을 입력해 주세요';
+    }
+    return null;
   }
 
-  void setAddress(String value) {
-    setState(() {
-      _address = value;
-    });
+  String? addressValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return '주소를 입력해 주세요';
+    }
+    return null;
   }
 
-  void setTel(String value) {
-    setState(() {
-      _tel = value;
-    });
+  String? telValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return '전화번호를 입력해 주세요';
+    }
+    return null;
   }
 
-  void idValidation() {
-    setState(() {
-      _isIdAvailable = _id != "asdf" ? true : false;
-    });
+  // TODO: implement submit form
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      String id = _idController.text;
+      String password = _passwordController.text;
+      String passwordVerify = _passwordVerifyController.text;
+      print('ID: $id');
+      print('Password: $password');
+      print('PasswordVerify: $passwordVerify');
+    }
   }
 
   Future<void> setBirth(BuildContext context) async {
@@ -110,14 +107,40 @@ class _RegisterState extends State<Register> {
     }
   }
 
+  void idValidation(BuildContext context) {
+    // TODO: implement duplicate email checking request
+    String existPassword = "asdf";
+
+    if (_idController.text == existPassword) {
+      CommonHelper.showSnackBar(context, "중복된 아이디입니다");
+      setState(() {
+        isIdAvailable = false;
+      });
+    } else {
+      CommonHelper.showSnackBar(context, "사용 가능한 아이디입니다");
+      setState(() {
+        isIdAvailable = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _idController.dispose();
+    _passwordController.dispose();
+    _passwordVerifyController.dispose();
+    _nameController.dispose();
+    _nickNameController.dispose();
+    _addressController.dispose();
+    _telController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     loggerNoStack.i("build register page");
-    print(_password);
-    print(_passwordVerify);
-    print(_isPasswordMatches);
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("회원가입"),
         centerTitle: true,
@@ -134,119 +157,131 @@ class _RegisterState extends State<Register> {
           padding:
               const EdgeInsets.symmetric(horizontal: Standard.defaultPadding),
           child: SingleChildScrollView(
-            child: Column(children: [
-              SizedBox(
-                  height: 150,
+            child: Form(
+              key: _formKey,
+              child: Column(children: [
+                const SizedBox(
+                  height: 40,
+                  child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                        "계정 정보를 입력해 주세요",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      )),
+                ),
+                SizedBox(
+                  height: 300,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 40, bottom: 10),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              InputLogin(
-                                name: "아이디",
-                                width: 240,
-                                icon: Icons.account_circle,
-                                onChanged: setId,
-                              ),
-                              BtnRegisterChecker(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 240,
+                            child: InputAuth(
+                                registerFormModel: RegisterFormModel(
+                              textEditingController: _idController,
+                              labelText: "아이디",
+                              icon: Icons.email,
+                              validator: idValidator,
+                              maxLength: 14,
+                            )),
+                          ),
+                          ValueListenableBuilder(
+                            valueListenable: _idController,
+                            builder:
+                                (BuildContext context, value, Widget? child) {
+                              return BtnRegisterChecker(
                                   name: "중복확인",
-                                  value: _id,
-                                  onPressed: idValidation)
-                            ]),
+                                  value: _idController.text,
+                                  onPressed: idValidation);
+                            },
+                          )
+                        ],
                       ),
-                      (_isIdAvailable == true)
-                          ? const Text(
-                              "사용 가능한 아이디입니다.",
-                              style: TextStyle(color: CustomColor.indigo),
-                            )
-                          : (_isIdAvailable == false)
-                              ? const Text(
-                                  "중복된 아이디입니다.",
-                                  style: TextStyle(color: Colors.red),
-                                )
-                              : const SizedBox()
+                      InputAuth(
+                          registerFormModel: RegisterFormModel(
+                        textEditingController: _passwordController,
+                        labelText: "비밀번호",
+                        icon: Icons.lock,
+                        validator: passwordValidator,
+                        isPassword: true,
+                      )),
+                      InputAuth(
+                          registerFormModel: RegisterFormModel(
+                        textEditingController: _passwordVerifyController,
+                        labelText: "비밀번호 확인",
+                        icon: Icons.check,
+                        isPassword: true,
+                      )),
                     ],
-                  )),
-              SizedBox(
-                height: 180,
-                child: Column(children: [
-                  SizedBox(
-                    height: 160,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        InputLogin(
-                          name: "비밀번호",
-                          icon: Icons.lock,
-                          isPassword: true,
-                          onChanged: setPassword,
-                        ),
-                        InputLogin(
-                          name: "비밀번호 확인",
-                          icon: Icons.check,
-                          isPassword: true,
-                          onChanged: setPasswordVerify,
-                        ),
-                      ],
-                    ),
                   ),
-                  (_isPasswordMatches == false)
-                      ? const Text(
-                          "비밀번호가 일치하지 않습니다.",
-                          style: TextStyle(color: Colors.red),
-                        )
-                      : const SizedBox()
-                ]),
-              ),
-              (_isPasswordMatches == true
-                  ? Column(
-                      children: [
-                        SizedBox(
-                          height: 450,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                InputLogin(
-                                  name: "이름",
-                                  icon: Icons.person,
-                                  onChanged: setName,
-                                ),
-                                InputLogin(
-                                  name: "닉네임",
-                                  icon: Icons.face,
-                                  onChanged: setNickName,
-                                ),
-                                PickerAuth(
-                                    icon: Icons.cake,
-                                    onTap: setBirth,
-                                    value: CommonHelper.dateFormatFull(_birth)),
-                                InputLogin(
-                                  name: "주소",
-                                  icon: Icons.location_on,
-                                  onChanged: setAddress,
-                                ),
-                                InputLogin(
-                                  name: "젼화번호",
-                                  icon: Icons.phone,
-                                  onChanged: setTel,
-                                ),
-                              ]),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
-                          child: BtnSubmit(
-                              name: "가입하기",
-                              backgroundColor: CustomColor.indigo,
-                              foregroundColor: CustomColor.white,
-                              onPressed: () {}),
-                        )
-                      ],
+                ),
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 40,
+                      child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            "회원님을 소개해 주세요",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 450,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InputAuth(
+                                registerFormModel: RegisterFormModel(
+                                    textEditingController: _nameController,
+                                    labelText: "이름",
+                                    icon: Icons.person,
+                                    validator: nameValidator,
+                                    maxLength: 10)),
+                            InputAuth(
+                                registerFormModel: RegisterFormModel(
+                                    textEditingController: _nickNameController,
+                                    labelText: "닉네임",
+                                    icon: Icons.face,
+                                    validator: nickNameValidator,
+                                    maxLength: 10)),
+                            PickerAuth(
+                                icon: Icons.cake,
+                                onTap: setBirth,
+                                value: CommonHelper.dateFormatFull(_birth)),
+                            InputAuth(
+                                registerFormModel: RegisterFormModel(
+                                    textEditingController: _addressController,
+                                    labelText: "주소",
+                                    icon: Icons.location_on,
+                                    validator: addressValidator,
+                                    maxLength: 50)),
+                            InputAuth(
+                                registerFormModel: RegisterFormModel(
+                                    textEditingController: _telController,
+                                    labelText: "전화번호",
+                                    icon: Icons.phone,
+                                    validator: telValidator,
+                                    maxLength: 13)),
+                          ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+                      child: BtnSubmit(
+                          name: "가입하기",
+                          backgroundColor: CustomColor.indigo,
+                          foregroundColor: CustomColor.white,
+                          onPressed: _submitForm),
                     )
-                  : const SizedBox())
-            ]),
+                  ],
+                )
+              ]),
+            ),
           ),
         ),
       ),

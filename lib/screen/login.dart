@@ -1,10 +1,12 @@
 import 'package:cd_client/main.dart';
 import 'package:cd_client/widget/button/btn_auth_options.dart';
+import 'package:cd_client/widget/input/input_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_submit.dart';
-import 'package:cd_client/widget/input/input_login.dart';
+
+import '../model/internal/register_form_model.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,20 +16,38 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String id = "";
-  String password = "";
-  String passwordVerify = "";
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  void setId(String value) {
-    setState(() {
-      id = value;
-    });
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      String id = _idController.text;
+      String password = _passwordController.text;
+      print('ID: $id');
+      print('Password: $password');
+    }
   }
 
-  void setPassword(String value) {
-    setState(() {
-      password = value;
-    });
+  String? idValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return '아이디를 입력해 주세요';
+    }
+    return null;
+  }
+
+  String? passwordValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return '비밀번호를 입력해 주세요';
+    }
+    return null;
+  }
+
+  @override
+  void dispose() {
+    _idController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,27 +73,40 @@ class _LoginState extends State<Login> {
               const EdgeInsets.symmetric(horizontal: Standard.defaultPadding),
           child: SizedBox(
             height: 400,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InputLogin(name: "아이디", icon: Icons.email, onChanged: setId),
-                InputLogin(
-                    name: "비밀번호",
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InputAuth(
+                      registerFormModel: RegisterFormModel(
+                    textEditingController: _idController,
+                    labelText: "아이디",
+                    icon: Icons.email,
+                    validator: idValidator,
+                  )),
+                  InputAuth(
+                      registerFormModel: RegisterFormModel(
+                    textEditingController: _passwordController,
+                    labelText: "비밀번호",
                     icon: Icons.lock,
+                    validator: passwordValidator,
                     isPassword: true,
-                    onChanged: setPassword),
-                BtnSubmit(
+                  )),
+                  BtnSubmit(
                     name: "로그인",
                     backgroundColor: CustomColor.indigo,
                     foregroundColor: CustomColor.white,
-                    onPressed: () {}),
-                BtnAuthOptions(
-                    height: 40,
-                    textL: "아이디 찾기",
-                    textR: "비밀번호 찾기",
-                    onPressedL: () {},
-                    onPressedR: () {})
-              ],
+                    onPressed: _submitForm,
+                  ),
+                  BtnAuthOptions(
+                      height: 40,
+                      textL: "아이디 찾기",
+                      textR: "비밀번호 찾기",
+                      onPressedL: () {},
+                      onPressedR: () {})
+                ],
+              ),
             ),
           ),
         ));

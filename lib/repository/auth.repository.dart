@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
-import 'package:cd_client/model/test_account.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import '../model/extrenal/test_account.dart';
 
 class AuthRepository {
   final String serverURL = Platform.isIOS

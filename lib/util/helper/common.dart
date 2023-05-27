@@ -13,4 +13,16 @@ class CommonHelper {
 
     return formattedDate;
   }
+
+  static void showSnackBar(BuildContext context, String text) {
+    var snackBar = SnackBar(
+      content: Center(
+          child: Text(
+        text,
+        style: const TextStyle(fontFamily: "KBO", fontSize: 14),
+      )),
+      duration: const Duration(seconds: 3),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }
