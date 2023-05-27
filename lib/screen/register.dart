@@ -1,9 +1,10 @@
-import 'package:cd_client/model/internal/register_form_model.dart';
+import 'package:cd_client/model/extrenal/request/register_req.dart';
 import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/widget/button/btn_register_checker.dart';
 import 'package:cd_client/widget/input/input_auth.dart';
 import 'package:cd_client/widget/picker/picker_auth.dart';
 import 'package:flutter/material.dart';
+import '../model/internal/widget_props/register_input_props.dart';
 import '../util/constant/custom_color.dart';
 import '../util/constant/standard.dart';
 import '../main.dart';
@@ -30,75 +31,8 @@ class _RegisterState extends State<Register> {
   bool isIdAvailable = false;
   late bool isPasswordMatches;
 
-  String? idValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '아이디를 입력해 주세요';
-    }
-
-    return null;
-  }
-
-  String? passwordValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '비밀번호를 입력해 주세요';
-    }
-
-    if (value == _passwordVerifyController.text) {
-      setState(() => isPasswordMatches = true);
-    } else {
-      setState(() => isPasswordMatches = false);
-      return "비밀번호가 일치하지 않습니다";
-    }
-    return null;
-  }
-
-  String? nameValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '이름을 입력해 주세요';
-    }
-    return null;
-  }
-
-  String? nickNameValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '닉네임을 입력해 주세요';
-    }
-    return null;
-  }
-
-  String? addressValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '주소를 입력해 주세요';
-    }
-    return null;
-  }
-
-  String? telValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '전화번호를 입력해 주세요';
-    }
-    return null;
-  }
-
-  // TODO: implement submit form
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      String id = _idController.text;
-      String password = _passwordController.text;
-      String passwordVerify = _passwordVerifyController.text;
-      print('ID: $id');
-      print('Password: $password');
-      print('PasswordVerify: $passwordVerify');
-    }
-  }
-
   Future<void> setBirth(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1920),
-      lastDate: DateTime(2024),
-    );
+    DateTime? picked = await CommonHelper.datePicker(context, 1920, 2024);
 
     if (picked != null) {
       setState(() {
@@ -124,6 +58,62 @@ class _RegisterState extends State<Register> {
     }
   }
 
+  bool checkAdult(DateTime selectedDate) {
+    DateTime currentDate = DateTime.now();
+    Duration difference = currentDate.difference(selectedDate);
+    int age = (difference.inDays / 365).floor();
+    return age >= 18;
+  }
+
+  // TODO: implement submit form
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      String id = _idController.text;
+      String password = _passwordController.text;
+      String name = _nameController.text;
+      String nickName = _nickNameController.text;
+      String address = _addressController.text;
+      String tel = _telController.text;
+      DateTime birth = _birth!;
+      bool isAdult = checkAdult(_birth!);
+
+      RegisterReq registerReq = RegisterReq(
+          id: id,
+          password: password,
+          name: name,
+          nickName: nickName,
+          address: address,
+          tel: tel,
+          birth: birth,
+          isAdult: isAdult);
+    }
+  }
+
+  void idInputChanged() {
+    if (isIdAvailable == true) {
+      setState(() {
+        isIdAvailable = false;
+      });
+    }
+  }
+
+  void passwordInputChanged() {
+    setState(() {
+      isPasswordMatches =
+          _passwordController.text == _passwordVerifyController.text
+              ? true
+              : false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _idController.addListener(idInputChanged);
+    _passwordController.addListener(passwordInputChanged);
+    _passwordVerifyController.addListener(passwordInputChanged);
+  }
+
   @override
   void dispose() {
     _idController.dispose();
@@ -133,6 +123,11 @@ class _RegisterState extends State<Register> {
     _nickNameController.dispose();
     _addressController.dispose();
     _telController.dispose();
+
+    _idController.removeListener(idInputChanged);
+    _passwordController.removeListener(passwordInputChanged);
+    _passwordVerifyController.removeListener(passwordInputChanged);
+
     super.dispose();
   }
 
@@ -181,11 +176,10 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             width: 240,
                             child: InputAuth(
-                                registerFormModel: RegisterFormModel(
+                                registerInputProps: RegisterInputProps(
                               textEditingController: _idController,
                               labelText: "아이디",
                               icon: Icons.email,
-                              validator: idValidator,
                               maxLength: 14,
                             )),
                           ),
@@ -202,15 +196,14 @@ class _RegisterState extends State<Register> {
                         ],
                       ),
                       InputAuth(
-                          registerFormModel: RegisterFormModel(
+                          registerInputProps: RegisterInputProps(
                         textEditingController: _passwordController,
                         labelText: "비밀번호",
                         icon: Icons.lock,
-                        validator: passwordValidator,
                         isPassword: true,
                       )),
                       InputAuth(
-                          registerFormModel: RegisterFormModel(
+                          registerInputProps: RegisterInputProps(
                         textEditingController: _passwordVerifyController,
                         labelText: "비밀번호 확인",
                         icon: Icons.check,
@@ -237,36 +230,32 @@ class _RegisterState extends State<Register> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             InputAuth(
-                                registerFormModel: RegisterFormModel(
+                                registerInputProps: RegisterInputProps(
                                     textEditingController: _nameController,
                                     labelText: "이름",
                                     icon: Icons.person,
-                                    validator: nameValidator,
                                     maxLength: 10)),
                             InputAuth(
-                                registerFormModel: RegisterFormModel(
+                                registerInputProps: RegisterInputProps(
                                     textEditingController: _nickNameController,
                                     labelText: "닉네임",
                                     icon: Icons.face,
-                                    validator: nickNameValidator,
                                     maxLength: 10)),
                             PickerAuth(
                                 icon: Icons.cake,
                                 onTap: setBirth,
                                 value: CommonHelper.dateFormatFull(_birth)),
                             InputAuth(
-                                registerFormModel: RegisterFormModel(
+                                registerInputProps: RegisterInputProps(
                                     textEditingController: _addressController,
                                     labelText: "주소",
                                     icon: Icons.location_on,
-                                    validator: addressValidator,
                                     maxLength: 50)),
                             InputAuth(
-                                registerFormModel: RegisterFormModel(
+                                registerInputProps: RegisterInputProps(
                                     textEditingController: _telController,
                                     labelText: "전화번호",
                                     icon: Icons.phone,
-                                    validator: telValidator,
                                     maxLength: 13)),
                           ]),
                     ),

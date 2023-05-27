@@ -21,8 +21,18 @@ class CommonHelper {
         text,
         style: const TextStyle(fontFamily: "KBO", fontSize: 14),
       )),
-      duration: const Duration(seconds: 3),
+      duration: const Duration(milliseconds: 1500),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static Future<DateTime?> datePicker(
+      BuildContext context, int firstDate, int lastDate) async {
+    return await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(firstDate),
+      lastDate: DateTime(lastDate),
+    );
   }
 }

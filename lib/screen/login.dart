@@ -6,7 +6,7 @@ import 'package:cd_client/util/constant/standard.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_submit.dart';
 
-import '../model/internal/register_form_model.dart';
+import '../model/internal/widget_props/register_input_props.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -79,18 +79,16 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InputAuth(
-                      registerFormModel: RegisterFormModel(
+                      registerInputProps: RegisterInputProps(
                     textEditingController: _idController,
                     labelText: "아이디",
                     icon: Icons.email,
-                    validator: idValidator,
                   )),
                   InputAuth(
-                      registerFormModel: RegisterFormModel(
+                      registerInputProps: RegisterInputProps(
                     textEditingController: _passwordController,
                     labelText: "비밀번호",
                     icon: Icons.lock,
-                    validator: passwordValidator,
                     isPassword: true,
                   )),
                   BtnSubmit(
