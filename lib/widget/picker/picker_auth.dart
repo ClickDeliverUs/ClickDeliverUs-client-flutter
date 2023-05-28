@@ -15,9 +15,9 @@ class PickerAuth extends StatelessWidget {
       onTap: () => onTap(context),
       child: Container(
         width: double.infinity,
-        height: 60,
+        height: 50,
         decoration: BoxDecoration(
-          color: CustomColor.whiteGrey,
+          border: Border.all(color: CustomColor.whiteGrey, width: 2),
           borderRadius: BorderRadius.circular(Standard.defaultBorderRadius),
         ),
         child: Row(children: [
@@ -29,8 +29,9 @@ class PickerAuth extends StatelessWidget {
             ),
           ),
           Text(
-            value == "" ? "생일" : value!,
-            style: const TextStyle(fontSize: 16, color: CustomColor.inputGrey),
+            value == "" ? "생년월일" : value!,
+            style: const TextStyle(
+                fontSize: 12, color: CustomColor.inputGrey, fontFamily: "KBO"),
           )
         ]),
       ),

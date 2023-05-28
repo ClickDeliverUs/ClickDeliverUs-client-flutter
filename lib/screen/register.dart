@@ -1,9 +1,11 @@
 import 'package:cd_client/model/extrenal/request/register_req.dart';
 import 'package:cd_client/util/helper/common.dart';
+import 'package:cd_client/util/helper/tel_format.dart';
 import 'package:cd_client/widget/button/btn_register_checker.dart';
 import 'package:cd_client/widget/input/input_auth.dart';
 import 'package:cd_client/widget/picker/picker_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../model/internal/widget_props/register_input_props.dart';
 import '../util/constant/custom_color.dart';
 import '../util/constant/standard.dart';
@@ -27,23 +29,24 @@ class _RegisterState extends State<Register> {
   final TextEditingController _nickNameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _telController = TextEditingController();
+  final List<bool> _gender = [true, false];
   DateTime? _birth;
-  bool isIdAvailable = false;
-  late bool isPasswordMatches;
+  bool? _isIdAvailable;
+  late bool _isPasswordMatches;
 
-  void setIsIdAvailable() {
+  void _setIsIdAvailable() {
     setState(() {
-      isIdAvailable = true;
+      _isIdAvailable = true;
     });
   }
 
-  void setIsIdUnavailable() {
+  void _setIsIdUnavailable() {
     setState(() {
-      isIdAvailable = false;
+      _isIdAvailable = false;
     });
   }
 
-  Future<void> setBirth(BuildContext context) async {
+  Future<void> _setBirth(BuildContext context) async {
     DateTime? picked = await CommonHelper.datePicker(context, 1920, 2024);
 
     if (picked != null) {
@@ -53,7 +56,7 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  bool checkAdult(DateTime selectedDate) {
+  bool _checkAdult(DateTime selectedDate) {
     DateTime currentDate = DateTime.now();
     Duration difference = currentDate.difference(selectedDate);
     int age = (difference.inDays / 365).floor();
@@ -61,22 +64,34 @@ class _RegisterState extends State<Register> {
   }
 
   void idInputChanged() {
-    if (isIdAvailable == true) {
-      setIsIdUnavailable();
+    if (_isIdAvailable == true) {
+      setState(() {
+        _isIdAvailable = null;
+      });
     }
   }
 
-  void passwordInputChanged() {
+  void _passwordInputChanged() {
     setState(() {
-      isPasswordMatches =
+      _isPasswordMatches =
           _passwordController.text == _passwordVerifyController.text
               ? true
               : false;
     });
   }
 
-  // TODO: implement submit form
+  // TODO: implement submit form, exception handling
   void _submitForm() {
+    if (_isIdAvailable == null || _isIdAvailable == false) {
+      CommonHelper.showSnackBar(context, "아이디 중복체크를 해주세요");
+      return;
+    }
+
+    if (_isPasswordMatches == false) {
+      CommonHelper.showSnackBar(context, "비밀번호가 일치하지 않습니다");
+      return;
+    }
+
     if (_formKey.currentState!.validate()) {
       String id = _idController.text;
       String password = _passwordController.text;
@@ -85,7 +100,8 @@ class _RegisterState extends State<Register> {
       String address = _addressController.text;
       String tel = _telController.text;
       DateTime birth = _birth!;
-      bool isAdult = checkAdult(_birth!);
+      bool gender = _gender[0];
+      bool isAdult = _checkAdult(_birth!);
 
       RegisterReq registerReq = RegisterReq(
           id: id,
@@ -95,7 +111,10 @@ class _RegisterState extends State<Register> {
           address: address,
           tel: tel,
           birth: birth,
+          gender: gender,
           isAdult: isAdult);
+    } else {
+      CommonHelper.showSnackBar(context, "입력란을 모두 채워주세요");
     }
   }
 
@@ -103,15 +122,15 @@ class _RegisterState extends State<Register> {
   void initState() {
     super.initState();
     _idController.addListener(idInputChanged);
-    _passwordController.addListener(passwordInputChanged);
-    _passwordVerifyController.addListener(passwordInputChanged);
+    _passwordController.addListener(_passwordInputChanged);
+    _passwordVerifyController.addListener(_passwordInputChanged);
   }
 
   @override
   void dispose() {
     _idController.removeListener(idInputChanged);
-    _passwordController.removeListener(passwordInputChanged);
-    _passwordVerifyController.removeListener(passwordInputChanged);
+    _passwordController.removeListener(_passwordInputChanged);
+    _passwordVerifyController.removeListener(_passwordInputChanged);
 
     _idController.dispose();
     _passwordController.dispose();
@@ -162,22 +181,23 @@ class _RegisterState extends State<Register> {
                       )),
                 ),
                 SizedBox(
-                  height: 300,
+                  height: 320,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
                             width: 240,
                             child: InputAuth(
                                 registerInputProps: RegisterInputProps(
-                              textEditingController: _idController,
-                              labelText: "아이디",
-                              icon: Icons.email,
-                              maxLength: 14,
-                            )),
+                                    textEditingController: _idController,
+                                    labelText: "아이디",
+                                    icon: Icons.email,
+                                    maxLength: 14,
+                                    borderCondition: _isIdAvailable)),
                           ),
                           ValueListenableBuilder(
                             valueListenable: _idController,
@@ -185,8 +205,8 @@ class _RegisterState extends State<Register> {
                                 (BuildContext context, value, Widget? child) {
                               return BtnRegisterChecker(
                                   value: _idController.text,
-                                  setIsIdAvailable: setIsIdAvailable,
-                                  setIsIdUnavailable: setIsIdUnavailable);
+                                  setIsIdAvailable: _setIsIdAvailable,
+                                  setIsIdUnavailable: _setIsIdUnavailable);
                             },
                           )
                         ],
@@ -237,10 +257,6 @@ class _RegisterState extends State<Register> {
                                     labelText: "닉네임",
                                     icon: Icons.face,
                                     maxLength: 10)),
-                            PickerAuth(
-                                icon: Icons.cake,
-                                onTap: setBirth,
-                                value: CommonHelper.dateFormatFull(_birth)),
                             InputAuth(
                                 registerInputProps: RegisterInputProps(
                                     textEditingController: _addressController,
@@ -250,9 +266,54 @@ class _RegisterState extends State<Register> {
                             InputAuth(
                                 registerInputProps: RegisterInputProps(
                                     textEditingController: _telController,
-                                    labelText: "전화번호",
+                                    labelText: "휴대폰   ['-' 없이 입력하세요.]",
                                     icon: Icons.phone,
-                                    maxLength: 13)),
+                                    maxLength: 13,
+                                    textInputFormatter: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  Telformat(),
+                                  LengthLimitingTextInputFormatter(13)
+                                ])),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 240,
+                                  child: PickerAuth(
+                                      icon: Icons.cake,
+                                      onTap: _setBirth,
+                                      value:
+                                          CommonHelper.dateFormatFull(_birth)),
+                                ),
+                                ToggleButtons(
+                                    isSelected: _gender,
+                                    onPressed: (index) {
+                                      setState(() {
+                                        for (var i = 0;
+                                            i < _gender.length;
+                                            i++) {
+                                          _gender[i] = (i == index);
+                                        }
+                                      });
+                                    },
+                                    borderRadius: BorderRadius.circular(
+                                        Standard.defaultBorderRadius),
+                                    selectedColor: CustomColor.indigo,
+                                    color: Colors.grey,
+                                    children: const [
+                                      Text(
+                                        "남",
+                                        style:
+                                            TextStyle(color: CustomColor.black),
+                                      ),
+                                      Text(
+                                        "여",
+                                        style:
+                                            TextStyle(color: CustomColor.black),
+                                      ),
+                                    ])
+                              ],
+                            ),
                           ]),
                     ),
                     Padding(

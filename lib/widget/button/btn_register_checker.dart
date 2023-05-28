@@ -19,7 +19,7 @@ class BtnRegisterChecker extends StatefulWidget {
 }
 
 class _BtnRegisterCheckerState extends State<BtnRegisterChecker> {
-  void idValidation(BuildContext context) {
+  void _idValidation(BuildContext context) {
     // TODO: implement duplicate email checking request
     String existPassword = "asdf";
 
@@ -35,7 +35,7 @@ class _BtnRegisterCheckerState extends State<BtnRegisterChecker> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: widget.value.isEmpty ? null : () => idValidation(context),
+        onPressed: widget.value.isEmpty ? null : () => _idValidation(context),
         style: ElevatedButton.styleFrom(
             minimumSize: const Size(80, 40),
             shape: RoundedRectangleBorder(

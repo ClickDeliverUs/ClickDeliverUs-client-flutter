@@ -6,6 +6,7 @@ class RegisterReq {
   final String address;
   final String tel;
   final DateTime birth;
+  final bool gender;
   final bool isAdult;
 
   RegisterReq(
@@ -16,5 +17,6 @@ class RegisterReq {
       required this.address,
       required this.tel,
       required this.birth,
+      required this.gender,
       required this.isAdult});
 }
