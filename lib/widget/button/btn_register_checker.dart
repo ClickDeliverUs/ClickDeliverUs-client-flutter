@@ -5,14 +5,13 @@ import '../../util/helper/common.dart';
 
 class BtnRegisterChecker extends StatefulWidget {
   final String value;
-  final void Function() setIsIdAvailable;
-  final void Function() setIsIdUnavailable;
+  final void Function(bool) setIsIdAvailable;
 
-  const BtnRegisterChecker(
-      {super.key,
-      required this.value,
-      required this.setIsIdAvailable,
-      required this.setIsIdUnavailable});
+  const BtnRegisterChecker({
+    super.key,
+    required this.value,
+    required this.setIsIdAvailable,
+  });
 
   @override
   State<BtnRegisterChecker> createState() => _BtnRegisterCheckerState();
@@ -25,10 +24,10 @@ class _BtnRegisterCheckerState extends State<BtnRegisterChecker> {
 
     if (widget.value == existPassword) {
       CommonHelper.showSnackBar(context, "중복된 아이디입니다");
-      widget.setIsIdUnavailable();
+      widget.setIsIdAvailable(false);
     } else {
       CommonHelper.showSnackBar(context, "사용 가능한 아이디입니다");
-      widget.setIsIdAvailable();
+      widget.setIsIdAvailable(true);
     }
   }
 

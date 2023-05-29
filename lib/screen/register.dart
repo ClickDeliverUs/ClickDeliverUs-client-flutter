@@ -1,12 +1,15 @@
 import 'package:cd_client/model/extrenal/request/register_req.dart';
 import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/util/helper/tel_format.dart';
+import 'package:cd_client/widget/button/btn_gender_toggle.dart';
 import 'package:cd_client/widget/button/btn_register_checker.dart';
 import 'package:cd_client/widget/input/input_auth.dart';
+import 'package:cd_client/widget/input/props/input_data.dart';
+import 'package:cd_client/widget/input/props/input_default.dart';
+import 'package:cd_client/widget/input/props/input_validate_options.dart';
 import 'package:cd_client/widget/picker/picker_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../model/internal/widget_props/register_input_props.dart';
 import '../util/constant/custom_color.dart';
 import '../util/constant/standard.dart';
 import '../main.dart';
@@ -21,29 +24,70 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordVerifyController =
-      TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _nickNameController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _telController = TextEditingController();
+
+  // 0: id, 1: password, 2: passwordVerify, 3: name, 4: nickName, 5: address, 6: tel
+  final List<TextEditingController> _textEditingControllers = List.generate(
+    7,
+    (_) => TextEditingController(),
+  );
   final List<bool> _gender = [true, false];
   DateTime? _birth;
   bool? _isIdAvailable;
-  late bool _isPasswordMatches;
+  bool? _isPasswordMatches;
+  bool? _isTelValid;
 
-  void _setIsIdAvailable() {
+  void _idInputChanged() {
+    if (_isIdAvailable == true) {
+      setState(() {
+        _isIdAvailable = null;
+      });
+    }
+  }
+
+  void _passwordInputChanged() {
+    if (_textEditingControllers[1].text.isEmpty &&
+        _textEditingControllers[2].text.isEmpty) {
+      _isPasswordMatches = null;
+      return;
+    }
+
     setState(() {
-      _isIdAvailable = true;
+      _isPasswordMatches =
+          _textEditingControllers[1].text == _textEditingControllers[2].text
+              ? true
+              : false;
     });
   }
 
-  void _setIsIdUnavailable() {
+  void _idTelInputChanged() {
+    if (_textEditingControllers[6].text.isEmpty) {
+      _isTelValid = null;
+      return;
+    }
+
     setState(() {
-      _isIdAvailable = false;
+      _isTelValid = _textEditingControllers[6].text.length != 13 ? false : null;
     });
+  }
+
+  String? _idErrorText() {
+    return _isIdAvailable == true
+        ? "사용 가능한 아이디입니다"
+        : _isIdAvailable == false
+            ? "중복된 아이디입니다"
+            : null;
+  }
+
+  String? _passwordErrorText() {
+    return _isPasswordMatches == true
+        ? "비밀번호가 일치합니다."
+        : _isPasswordMatches == false
+            ? "비밀번호가 일치하지 않습니다."
+            : null;
+  }
+
+  String? _telErrorText() {
+    return _isTelValid == false ? "유효하지 않은 전화번호입니다." : null;
   }
 
   Future<void> _setBirth(BuildContext context) async {
@@ -56,89 +100,111 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  bool _checkAdult(DateTime selectedDate) {
-    DateTime currentDate = DateTime.now();
-    Duration difference = currentDate.difference(selectedDate);
-    int age = (difference.inDays / 365).floor();
-    return age >= 18;
-  }
-
-  void idInputChanged() {
-    if (_isIdAvailable == true) {
-      setState(() {
-        _isIdAvailable = null;
-      });
-    }
-  }
-
-  void _passwordInputChanged() {
+  void _setGender(int index) {
     setState(() {
-      _isPasswordMatches =
-          _passwordController.text == _passwordVerifyController.text
-              ? true
-              : false;
+      for (int i = 0; i < _gender.length; i++) {
+        _gender[i] = (i == index);
+      }
     });
   }
 
-  // TODO: implement submit form, exception handling
+  void _setIsIdAvailable(bool isAvailable) {
+    setState(() {
+      _isIdAvailable = isAvailable;
+    });
+  }
+
+  bool _checkAdult(DateTime birthDate) {
+    final currentDate = DateTime.now();
+    final age = currentDate.year - birthDate.year;
+
+    if (currentDate.month < birthDate.month) {
+      return age < 19;
+    } else if (currentDate.month == birthDate.month) {
+      if (currentDate.day < birthDate.day) {
+        return age < 19;
+      }
+    }
+
+    return age >= 19;
+  }
+
   void _submitForm() {
-    if (_isIdAvailable == null || _isIdAvailable == false) {
+    bool hasEmptyField = false;
+
+    for (int i = 0; i < _textEditingControllers.length; i++) {
+      if (_textEditingControllers[i].text.isEmpty) {
+        hasEmptyField = true;
+        break;
+      }
+    }
+
+    if (hasEmptyField || _birth == null) {
+      CommonHelper.showSnackBar(context, "빈칸을 모두 입력해 주세요");
+      return;
+    }
+
+    if (_isIdAvailable != true) {
       CommonHelper.showSnackBar(context, "아이디 중복체크를 해주세요");
       return;
     }
 
-    if (_isPasswordMatches == false) {
+    if (_isPasswordMatches != true) {
       CommonHelper.showSnackBar(context, "비밀번호가 일치하지 않습니다");
       return;
     }
 
-    if (_formKey.currentState!.validate()) {
-      String id = _idController.text;
-      String password = _passwordController.text;
-      String name = _nameController.text;
-      String nickName = _nickNameController.text;
-      String address = _addressController.text;
-      String tel = _telController.text;
-      DateTime birth = _birth!;
-      bool gender = _gender[0];
-      bool isAdult = _checkAdult(_birth!);
-
-      RegisterReq registerReq = RegisterReq(
-          id: id,
-          password: password,
-          name: name,
-          nickName: nickName,
-          address: address,
-          tel: tel,
-          birth: birth,
-          gender: gender,
-          isAdult: isAdult);
-    } else {
-      CommonHelper.showSnackBar(context, "입력란을 모두 채워주세요");
+    if (_textEditingControllers[6].text.length != 13) {
+      CommonHelper.showSnackBar(context, "전화번호가 올바르지 않습니다");
+      return;
     }
+
+    RegisterReq registerReq = RegisterReq(
+        id: _textEditingControllers[0].text,
+        password: _textEditingControllers[1].text,
+        name: _textEditingControllers[3].text,
+        nickName: _textEditingControllers[4].text,
+        address: _textEditingControllers[5].text,
+        tel: _textEditingControllers[6].text,
+        birth: _birth!,
+        gender: _gender[0],
+        isAdult: _checkAdult(_birth!));
+  }
+
+  Widget containerTitle(String title) {
+    return SizedBox(
+      height: 60,
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          )),
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    _idController.addListener(idInputChanged);
-    _passwordController.addListener(_passwordInputChanged);
-    _passwordVerifyController.addListener(_passwordInputChanged);
+    _textEditingControllers[0].addListener(_idInputChanged);
+    _textEditingControllers[1].addListener(_passwordInputChanged);
+    _textEditingControllers[2].addListener(_passwordInputChanged);
+    _textEditingControllers[6].addListener(_idTelInputChanged);
   }
 
   @override
   void dispose() {
-    _idController.removeListener(idInputChanged);
-    _passwordController.removeListener(_passwordInputChanged);
-    _passwordVerifyController.removeListener(_passwordInputChanged);
+    _textEditingControllers[0].removeListener(_idInputChanged);
+    _textEditingControllers[1].removeListener(_passwordInputChanged);
+    _textEditingControllers[2].removeListener(_passwordInputChanged);
+    _textEditingControllers[6].removeListener(_idTelInputChanged);
 
-    _idController.dispose();
-    _passwordController.dispose();
-    _passwordVerifyController.dispose();
-    _nameController.dispose();
-    _nickNameController.dispose();
-    _addressController.dispose();
-    _telController.dispose();
+    for (var controller in _textEditingControllers) {
+      controller.dispose();
+    }
 
     super.dispose();
   }
@@ -166,168 +232,177 @@ class _RegisterState extends State<Register> {
               const EdgeInsets.symmetric(horizontal: Standard.defaultPadding),
           child: SingleChildScrollView(
             child: Form(
-              key: _formKey,
-              child: Column(children: [
-                const SizedBox(
-                  height: 40,
-                  child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        "계정 정보를 입력해 주세요",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                ),
-                SizedBox(
-                  height: 320,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 240,
-                            child: InputAuth(
-                                registerInputProps: RegisterInputProps(
-                                    textEditingController: _idController,
-                                    labelText: "아이디",
-                                    icon: Icons.email,
-                                    maxLength: 14,
-                                    borderCondition: _isIdAvailable)),
-                          ),
-                          ValueListenableBuilder(
-                            valueListenable: _idController,
-                            builder:
-                                (BuildContext context, value, Widget? child) {
-                              return BtnRegisterChecker(
-                                  value: _idController.text,
-                                  setIsIdAvailable: _setIsIdAvailable,
-                                  setIsIdUnavailable: _setIsIdUnavailable);
-                            },
-                          )
-                        ],
-                      ),
-                      InputAuth(
-                          registerInputProps: RegisterInputProps(
-                        textEditingController: _passwordController,
-                        labelText: "비밀번호",
-                        icon: Icons.lock,
-                        isPassword: true,
-                      )),
-                      InputAuth(
-                          registerInputProps: RegisterInputProps(
-                        textEditingController: _passwordVerifyController,
-                        labelText: "비밀번호 확인",
-                        icon: Icons.check,
-                        isPassword: true,
-                      )),
-                    ],
-                  ),
-                ),
-                Column(
+                key: _formKey,
+                child: Column(
                   children: [
-                    const SizedBox(
-                      height: 40,
-                      child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            "회원님을 소개해 주세요",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 450,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Column(
+                      children: [
+                        containerTitle("계정 정보를 입력해 주세요"),
+                        Column(
                           children: [
-                            InputAuth(
-                                registerInputProps: RegisterInputProps(
-                                    textEditingController: _nameController,
-                                    labelText: "이름",
-                                    icon: Icons.person,
-                                    maxLength: 10)),
-                            InputAuth(
-                                registerInputProps: RegisterInputProps(
-                                    textEditingController: _nickNameController,
-                                    labelText: "닉네임",
-                                    icon: Icons.face,
-                                    maxLength: 10)),
-                            InputAuth(
-                                registerInputProps: RegisterInputProps(
-                                    textEditingController: _addressController,
-                                    labelText: "주소",
-                                    icon: Icons.location_on,
-                                    maxLength: 50)),
-                            InputAuth(
-                                registerInputProps: RegisterInputProps(
-                                    textEditingController: _telController,
-                                    labelText: "휴대폰   ['-' 없이 입력하세요.]",
-                                    icon: Icons.phone,
-                                    maxLength: 13,
-                                    textInputFormatter: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  Telformat(),
-                                  LengthLimitingTextInputFormatter(13)
-                                ])),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
                                   width: 240,
-                                  child: PickerAuth(
-                                      icon: Icons.cake,
-                                      onTap: _setBirth,
-                                      value:
-                                          CommonHelper.dateFormatFull(_birth)),
+                                  child: InputAuth(
+                                    inputDefault: InputDefault(
+                                      labelText: "아이디  [영문, 숫자]",
+                                      icon: Icons.email,
+                                    ),
+                                    inputData: InputData(
+                                        textEditingController:
+                                            _textEditingControllers[0],
+                                        maxLength: 14),
+                                    inputValidateOptions: InputValidateOptions(
+                                        condition: _isIdAvailable,
+                                        text: _idErrorText()),
+                                    textInputFormatter: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[a-zA-Z0-9]')),
+                                    ],
+                                  ),
                                 ),
-                                ToggleButtons(
-                                    isSelected: _gender,
-                                    onPressed: (index) {
-                                      setState(() {
-                                        for (var i = 0;
-                                            i < _gender.length;
-                                            i++) {
-                                          _gender[i] = (i == index);
-                                        }
-                                      });
-                                    },
-                                    borderRadius: BorderRadius.circular(
-                                        Standard.defaultBorderRadius),
-                                    selectedColor: CustomColor.indigo,
-                                    color: Colors.grey,
-                                    children: const [
-                                      Text(
-                                        "남",
-                                        style:
-                                            TextStyle(color: CustomColor.black),
-                                      ),
-                                      Text(
-                                        "여",
-                                        style:
-                                            TextStyle(color: CustomColor.black),
-                                      ),
-                                    ])
+                                ValueListenableBuilder(
+                                  valueListenable: _textEditingControllers[0],
+                                  builder: (BuildContext context, value,
+                                      Widget? child) {
+                                    return BtnRegisterChecker(
+                                      value: _textEditingControllers[0].text,
+                                      setIsIdAvailable: _setIsIdAvailable,
+                                    );
+                                  },
+                                )
                               ],
                             ),
-                          ]),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            SizedBox(
+                              height: 150,
+                              child: Column(
+                                children: [
+                                  InputAuth(
+                                    inputDefault: InputDefault(
+                                      labelText: "비밀번호",
+                                      icon: Icons.lock,
+                                    ),
+                                    inputData: InputData(
+                                        textEditingController:
+                                            _textEditingControllers[1],
+                                        obscureText: true),
+                                    inputValidateOptions: InputValidateOptions(
+                                        condition: _isPasswordMatches),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  InputAuth(
+                                    inputDefault: InputDefault(
+                                      labelText: "비밀번호 확인",
+                                      icon: Icons.check,
+                                    ),
+                                    inputData: InputData(
+                                        textEditingController:
+                                            _textEditingControllers[2],
+                                        obscureText: true),
+                                    inputValidateOptions: InputValidateOptions(
+                                        condition: _isPasswordMatches,
+                                        text: _passwordErrorText()),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        containerTitle("회원님을 소개해 주세요"),
+                        SizedBox(
+                          height: 400,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                InputAuth(
+                                    inputDefault: InputDefault(
+                                      labelText: "이름",
+                                      icon: Icons.person,
+                                    ),
+                                    inputData: InputData(
+                                        textEditingController:
+                                            _textEditingControllers[3],
+                                        maxLength: 10)),
+                                InputAuth(
+                                    inputDefault: InputDefault(
+                                      labelText: "닉네임",
+                                      icon: Icons.face,
+                                    ),
+                                    inputData: InputData(
+                                        textEditingController:
+                                            _textEditingControllers[4],
+                                        maxLength: 10)),
+                                InputAuth(
+                                    inputDefault: InputDefault(
+                                      labelText: "주소",
+                                      icon: Icons.location_on,
+                                    ),
+                                    inputData: InputData(
+                                        textEditingController:
+                                            _textEditingControllers[5],
+                                        maxLength: 50)),
+                                InputAuth(
+                                  inputDefault: InputDefault(
+                                    labelText: "휴대폰   ['-' 없이 입력하세요.]",
+                                    icon: Icons.phone,
+                                  ),
+                                  inputData: InputData(
+                                    textEditingController:
+                                        _textEditingControllers[6],
+                                    maxLength: 13,
+                                  ),
+                                  inputValidateOptions: InputValidateOptions(
+                                      condition: _isTelValid,
+                                      text: _telErrorText()),
+                                  textInputFormatter: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    Telformat(),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: 240,
+                                      child: PickerAuth(
+                                          icon: Icons.cake,
+                                          onTap: _setBirth,
+                                          value: CommonHelper.dateFormatFull(
+                                              _birth)),
+                                    ),
+                                    BtnGenderToggle(
+                                      gender: _gender,
+                                      onPressed: _setGender,
+                                    )
+                                  ],
+                                ),
+                              ]),
+                        ),
+                      ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+                      padding: const EdgeInsets.symmetric(vertical: 30),
                       child: BtnSubmit(
                           name: "가입하기",
                           backgroundColor: CustomColor.indigo,
                           foregroundColor: CustomColor.white,
                           onPressed: _submitForm),
-                    )
+                    ),
                   ],
-                )
-              ]),
-            ),
+                )),
           ),
         ),
       ),

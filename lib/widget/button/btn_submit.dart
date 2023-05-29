@@ -27,7 +27,10 @@ class BtnSubmit extends StatelessWidget {
         foregroundColor: foregroundColor,
         backgroundColor: backgroundColor,
       ),
-      child: Text(name),
+      child: Text(
+        name,
+        style: const TextStyle(fontSize: 15, fontFamily: "KBO"),
+      ),
     );
   }
 }

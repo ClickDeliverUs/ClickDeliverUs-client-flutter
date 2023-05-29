@@ -1,12 +1,12 @@
 import 'package:cd_client/main.dart';
 import 'package:cd_client/widget/button/btn_auth_options.dart';
 import 'package:cd_client/widget/input/input_auth.dart';
+import 'package:cd_client/widget/input/props/input_data.dart';
+import 'package:cd_client/widget/input/props/input_default.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_submit.dart';
-
-import '../model/internal/widget_props/register_input_props.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -65,18 +65,21 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InputAuth(
-                      registerInputProps: RegisterInputProps(
-                    textEditingController: _idController,
-                    labelText: "아이디",
-                    icon: Icons.email,
-                  )),
+                    inputDefault: InputDefault(
+                      labelText: "아이디",
+                      icon: Icons.email,
+                    ),
+                    inputData: InputData(textEditingController: _idController),
+                  ),
                   InputAuth(
-                      registerInputProps: RegisterInputProps(
-                    textEditingController: _passwordController,
-                    labelText: "비밀번호",
-                    icon: Icons.lock,
-                    isPassword: true,
-                  )),
+                    inputDefault: InputDefault(
+                      labelText: "비밀번호",
+                      icon: Icons.lock,
+                    ),
+                    inputData: InputData(
+                        textEditingController: _passwordController,
+                        obscureText: true),
+                  ),
                   BtnSubmit(
                     name: "로그인",
                     backgroundColor: CustomColor.indigo,
