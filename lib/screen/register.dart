@@ -355,7 +355,7 @@ class _RegisterState extends State<Register> {
                                         maxLength: 50)),
                                 InputAuth(
                                   inputDefault: InputDefault(
-                                    labelText: "휴대폰   ['-' 없이 입력하세요.]",
+                                    labelText: "휴대폰  ['-' 없이 입력하세요.]",
                                     icon: Icons.phone,
                                   ),
                                   inputData: InputData(

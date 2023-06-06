@@ -1,4 +1,5 @@
 import 'package:cd_client/main.dart';
+import 'package:cd_client/screen/home.dart';
 import 'package:cd_client/widget/button/btn_auth_options.dart';
 import 'package:cd_client/widget/input/input_auth.dart';
 import 'package:cd_client/widget/input/props/input_data.dart';

@@ -5,6 +5,7 @@ import 'package:cd_client/widget/button/btn_auth_options.dart';
 import 'package:cd_client/widget/button/btn_oAuth2_login.dart';
 import 'package:flutter/material.dart';
 import '../util/constant/standard.dart';
+import 'home.dart';
 import 'login.dart';
 
 class Index extends StatelessWidget {
@@ -27,6 +28,14 @@ class Index extends StatelessWidget {
                     style: TextStyle(fontSize: 25, fontFamily: "KCC-Ganpan"),
                   )),
                 ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context) => const Home()));
+                    },
+                    child: const Text("test")),
                 const SizedBox(
                   height: 300,
                   child: Center(
