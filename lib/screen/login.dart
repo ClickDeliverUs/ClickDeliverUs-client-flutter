@@ -1,5 +1,4 @@
 import 'package:cd_client/main.dart';
-import 'package:cd_client/screen/home.dart';
 import 'package:cd_client/widget/button/btn_auth_options.dart';
 import 'package:cd_client/widget/input/input_auth.dart';
 import 'package:cd_client/widget/input/props/input_data.dart';
@@ -8,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/widget/button/btn_submit.dart';
+
+import 'home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,12 +23,17 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      String id = _idController.text;
-      String password = _passwordController.text;
-      print('ID: $id');
-      print('Password: $password');
-    }
+    // if (_formKey.currentState!.validate()) {
+    //   String id = _idController.text;
+    //   String password = _passwordController.text;
+    //   print('ID: $id');
+    //   print('Password: $password');
+    // }
+
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+        (route) => false);
   }
 
   @override
@@ -43,11 +49,10 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text("로그인"),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

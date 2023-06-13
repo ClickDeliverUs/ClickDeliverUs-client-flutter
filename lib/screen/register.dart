@@ -214,11 +214,10 @@ class _RegisterState extends State<Register> {
     loggerNoStack.i("build register page");
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("회원가입"),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

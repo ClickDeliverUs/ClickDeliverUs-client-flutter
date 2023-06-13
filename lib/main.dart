@@ -25,10 +25,11 @@ class MyApp extends StatelessWidget {
       title: "Flutter Tutorial",
       theme: ThemeData(
           fontFamily: "KBO",
+          scaffoldBackgroundColor: Colors.white,
           appBarTheme: const AppBarTheme(
-              color: Colors.white,
-              elevation: 0,
-              foregroundColor: Colors.black)),
+            backgroundColor: Colors.white,
+            elevation: 0,
+          )),
       home: const Index(),
     );
   }
