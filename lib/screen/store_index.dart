@@ -1,5 +1,6 @@
-import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/util/constant/standard.dart';
+import 'package:cd_client/widget/button/btn_product.dart';
+import 'package:cd_client/widget/button/btn_product_category.dart';
 import 'package:flutter/material.dart';
 
 class StoreIndex extends StatefulWidget {
@@ -42,21 +43,6 @@ class _StoreIndexState extends State<StoreIndex> {
                 fontFamily: "KBO",
               ))
         ],
-      ),
-    );
-  }
-
-  Widget _categoryBtn() {
-    return GestureDetector(
-      onTap: () {
-        print("haha");
-      },
-      child: Container(
-        color: Colors.grey,
-        margin: const EdgeInsets.all(20.0),
-        child: const Center(
-          child: Text("alac"),
-        ),
       ),
     );
   }
@@ -148,6 +134,21 @@ class _StoreIndexState extends State<StoreIndex> {
                           color: Colors.grey,
                         ),
                       ),
+                      SizedBox(
+                        height: 35,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: const [
+                            BtnProductCategory(title: "전체"),
+                            BtnProductCategory(title: "전체"),
+                            BtnProductCategory(title: "전체"),
+                            BtnProductCategory(title: "전체"),
+                            BtnProductCategory(title: "전체"),
+                            BtnProductCategory(title: "전체"),
+                            BtnProductCategory(title: "전체"),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -160,7 +161,7 @@ class _StoreIndexState extends State<StoreIndex> {
             ),
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return _categoryBtn();
+                return const BtnProduct();
               },
               childCount: 200,
             ),
