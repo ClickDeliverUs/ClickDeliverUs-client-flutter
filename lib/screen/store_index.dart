@@ -2,6 +2,7 @@ import 'package:cd_client/util/constant/standard.dart';
 import 'package:cd_client/widget/button/btn_product.dart';
 import 'package:cd_client/widget/button/btn_product_category.dart';
 import 'package:flutter/material.dart';
+import 'shopping.dart';
 
 class StoreIndex extends StatefulWidget {
   const StoreIndex({super.key});
@@ -83,7 +84,12 @@ class _StoreIndexState extends State<StoreIndex> {
           ),
           IconButton(
             icon: Icon(Icons.shopping_cart, color: _appbarLeadingColor),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Shopping()),
+              );
+            },
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:cd_client/model/internal/test_store.dart';
 import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'storemodal.dart';
+import 'showdrawer.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -41,6 +42,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         backgroundColor: CustomColor.indigo,
       ),
+      drawer: const ShowDrawer(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Center(
