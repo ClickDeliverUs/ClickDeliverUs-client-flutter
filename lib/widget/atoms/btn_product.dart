@@ -2,8 +2,8 @@ import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:flutter/material.dart';
 
-class BtnProduct extends StatelessWidget {
-  const BtnProduct({super.key});
+class ProductContainer extends StatelessWidget {
+  const ProductContainer({super.key});
 
   @override
   Widget build(BuildContext context) {

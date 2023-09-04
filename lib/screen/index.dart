@@ -1,8 +1,8 @@
 import 'package:cd_client/screen/register.dart';
 import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/util/helper/enum.dart';
-import 'package:cd_client/widget/button/btn_auth_options.dart';
-import 'package:cd_client/widget/button/btn_oAuth2_login.dart';
+import 'package:cd_client/widget/molecules/auth_option_row.dart';
+import 'package:cd_client/widget/atoms/button/oAuth2_btn.dart';
 import 'package:flutter/material.dart';
 import '../util/constant/standard.dart';
 import 'login.dart';
@@ -33,15 +33,15 @@ class Index extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    BtnOAuth2Login(socialEnum: SocialEnum.kakao),
-                    BtnOAuth2Login(socialEnum: SocialEnum.naver),
-                    BtnOAuth2Login(socialEnum: SocialEnum.facebook),
-                    BtnOAuth2Login(socialEnum: SocialEnum.google),
+                    OAuth2Btn(socialEnum: SocialEnum.kakao),
+                    OAuth2Btn(socialEnum: SocialEnum.naver),
+                    OAuth2Btn(socialEnum: SocialEnum.facebook),
+                    OAuth2Btn(socialEnum: SocialEnum.google),
                   ],
                 ),
               ),
             ),
-            BtnAuthOptions(
+            AuthOptionRow(
               height: 100,
               textL: "아이디로 로그인",
               textR: "아이디로 회원가입",

@@ -1,9 +1,8 @@
 import 'package:cd_client/model/internal/test_store.dart';
-import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/util/helper/enum.dart';
-import 'package:cd_client/widget/button/primary_btn.dart';
-import 'package:cd_client/widget/button/secondary_btn.dart';
-import 'package:cd_client/widget/button/tertiary_btn.dart';
+import 'package:cd_client/widget/atoms/button/primary_btn.dart';
+import 'package:cd_client/widget/atoms/button/secondary_btn.dart';
+import 'package:cd_client/widget/atoms/button/tertiary_btn.dart';
 import 'package:flutter/material.dart';
 import 'storemodal.dart';
 import 'showdrawer.dart';
@@ -58,45 +57,42 @@ class _HomeState extends State<Home> {
         ),
       ),
       endDrawer: const ShowDrawer(),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              PrimaryBtn(
-                label: "편의점 1",
-                onPressed: () {
-                  _modalHandler(store1);
-                },
-                widgetColor: WidgetColor.skyblue,
-                widgetSize: WidgetSize.big,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SecondaryBtn(
-                label: "편의점 2",
-                onPressed: () {
-                  _modalHandler(store2);
-                },
-                widgetColor: WidgetColor.skyblue,
-                widgetSize: WidgetSize.small,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TertiaryBtn(
-                label: "편의점 3",
-                onPressed: () {
-                  _modalHandler(store3);
-                },
-              ),
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            PrimaryBtn(
+              label: "편의점 1",
+              onPressed: () {
+                _modalHandler(store1);
+              },
+              widgetColor: WidgetColor.skyblue,
+              widgetSize: WidgetSize.big,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SecondaryBtn(
+              label: "편의점 2",
+              onPressed: () {
+                _modalHandler(store2);
+              },
+              widgetColor: WidgetColor.skyblue,
+              widgetSize: WidgetSize.small,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TertiaryBtn(
+              label: "편의점 3",
+              onPressed: () {
+                _modalHandler(store3);
+              },
+            ),
+          ],
         ),
       ),
     );

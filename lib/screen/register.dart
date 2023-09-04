@@ -1,19 +1,19 @@
 import 'package:cd_client/model/extrenal/request/register_req.dart';
 import 'package:cd_client/util/helper/common.dart';
+import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/util/helper/tel_format.dart';
-import 'package:cd_client/widget/button/btn_gender_toggle.dart';
-import 'package:cd_client/widget/button/btn_register_checker.dart';
-import 'package:cd_client/widget/input/input_auth.dart';
-import 'package:cd_client/widget/input/props/input_data.dart';
-import 'package:cd_client/widget/input/props/input_default.dart';
-import 'package:cd_client/widget/input/props/input_validate_options.dart';
-import 'package:cd_client/widget/picker/picker_auth.dart';
+import 'package:cd_client/widget/atoms/button/btn_gender_toggle.dart';
+import 'package:cd_client/widget/atoms/button/btn_register_checker.dart';
+import 'package:cd_client/widget/atoms/button/primary_btn.dart';
+import 'package:cd_client/widget/atoms/input/input_auth.dart';
+import 'package:cd_client/widget/atoms/input/props/input_data.dart';
+import 'package:cd_client/widget/atoms/input/props/input_default.dart';
+import 'package:cd_client/widget/atoms/input/props/input_validate_options.dart';
+import 'package:cd_client/widget/atoms/picker/picker_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../util/constant/custom_color.dart';
 import '../util/constant/standard.dart';
 import '../main.dart';
-import '../widget/button/btn_submit.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -400,11 +400,13 @@ class _RegisterState extends State<Register> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 30),
-                    child: BtnSubmit(
-                        name: "가입하기",
-                        backgroundColor: CustomColor.indigo,
-                        foregroundColor: CustomColor.white,
-                        onPressed: _submitForm),
+                    child: PrimaryBtn(
+                      label: "가입하기",
+                      onPressed: _submitForm,
+                      widgetColor: WidgetColor.skyblue,
+                      widgetSize: WidgetSize.big,
+                      width: double.infinity,
+                    ),
                   ),
                 ],
               ),

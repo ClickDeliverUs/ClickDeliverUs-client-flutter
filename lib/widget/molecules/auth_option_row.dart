@@ -1,14 +1,15 @@
+import 'package:cd_client/widget/atoms/button/tertiary_btn.dart';
 import 'package:flutter/material.dart';
 import '../../util/constant/custom_color.dart';
 
-class BtnAuthOptions extends StatelessWidget {
+class AuthOptionRow extends StatelessWidget {
   final double height;
   final String textL;
   final String textR;
   final VoidCallback onPressedL;
   final VoidCallback onPressedR;
 
-  const BtnAuthOptions(
+  const AuthOptionRow(
       {super.key,
       required this.height,
       required this.textL,
@@ -24,12 +25,9 @@ class BtnAuthOptions extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          TextButton(
+          TertiaryBtn(
+            label: textL,
             onPressed: onPressedL,
-            child: Text(
-              textL,
-              style: const TextStyle(color: CustomColor.grey),
-            ),
           ),
           VerticalDivider(
             color: CustomColor.grey,
@@ -38,12 +36,9 @@ class BtnAuthOptions extends StatelessWidget {
             indent: verticalIntent,
             endIndent: verticalIntent,
           ),
-          TextButton(
+          TertiaryBtn(
+            label: textR,
             onPressed: onPressedR,
-            child: Text(
-              textR,
-              style: const TextStyle(color: CustomColor.grey),
-            ),
           ),
         ],
       ),

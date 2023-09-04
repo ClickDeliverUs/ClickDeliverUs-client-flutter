@@ -1,12 +1,12 @@
 import 'package:cd_client/main.dart';
-import 'package:cd_client/widget/button/btn_auth_options.dart';
-import 'package:cd_client/widget/input/input_auth.dart';
-import 'package:cd_client/widget/input/props/input_data.dart';
-import 'package:cd_client/widget/input/props/input_default.dart';
+import 'package:cd_client/util/helper/enum.dart';
+import 'package:cd_client/widget/molecules/auth_option_row.dart';
+import 'package:cd_client/widget/atoms/button/primary_btn.dart';
+import 'package:cd_client/widget/atoms/input/input_auth.dart';
+import 'package:cd_client/widget/atoms/input/props/input_data.dart';
+import 'package:cd_client/widget/atoms/input/props/input_default.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/util/constant/standard.dart';
-import 'package:cd_client/util/constant/custom_color.dart';
-import 'package:cd_client/widget/button/btn_submit.dart';
 
 import 'home.dart';
 
@@ -86,13 +86,14 @@ class _LoginState extends State<Login> {
                       textEditingController: _passwordController,
                       obscureText: true),
                 ),
-                BtnSubmit(
-                  name: "로그인",
-                  backgroundColor: CustomColor.indigo,
-                  foregroundColor: CustomColor.white,
+                PrimaryBtn(
+                  label: "로그인",
                   onPressed: _submitForm,
+                  widgetColor: WidgetColor.skyblue,
+                  widgetSize: WidgetSize.big,
+                  width: double.infinity,
                 ),
-                BtnAuthOptions(
+                AuthOptionRow(
                   height: 40,
                   textL: "아이디 찾기",
                   textR: "비밀번호 찾기",

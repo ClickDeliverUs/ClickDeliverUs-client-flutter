@@ -14,6 +14,7 @@ var loggerNoStack = Logger(
 
 void main() async {
   await dotenv.load();
+
   runApp(const MyApp());
 }
 

@@ -2,19 +2,19 @@ import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../util/helper/enum.dart';
+import '../../../util/helper/enum.dart';
 
-class BtnOAuth2Login extends StatefulWidget {
+class OAuth2Btn extends StatefulWidget {
   final SocialEnum socialEnum;
   // final VoidCallback onPressed;
 
-  const BtnOAuth2Login({super.key, required this.socialEnum});
+  const OAuth2Btn({super.key, required this.socialEnum});
 
   @override
-  State<BtnOAuth2Login> createState() => _BtnOAuth2LoginState();
+  State<OAuth2Btn> createState() => _OAuth2BtnState();
 }
 
-class _BtnOAuth2LoginState extends State<BtnOAuth2Login> {
+class _OAuth2BtnState extends State<OAuth2Btn> {
   late String _socialIcon;
   late String _title;
   late Color _backgroundColor;

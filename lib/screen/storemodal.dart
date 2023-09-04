@@ -1,8 +1,8 @@
 import 'package:cd_client/screen/store_index.dart';
+import 'package:cd_client/util/helper/enum.dart';
+import 'package:cd_client/widget/atoms/button/primary_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/model/internal/test_store.dart';
-import 'package:cd_client/util/constant/custom_color.dart';
-import 'package:cd_client/widget/button/btn_submit.dart';
 
 Widget _storeInfo(IconData icon, String text) {
   return Container(
@@ -132,10 +132,8 @@ void showStoreModal(BuildContext context, TestStore store) {
                 child: SizedBox(
                   width: 200,
                   height: 40,
-                  child: BtnSubmit(
-                    name: "주문",
-                    backgroundColor: CustomColor.indigo,
-                    foregroundColor: CustomColor.white,
+                  child: PrimaryBtn(
+                    label: "주문",
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -143,6 +141,9 @@ void showStoreModal(BuildContext context, TestStore store) {
                             builder: (context) => const StoreIndex()),
                       );
                     },
+                    widgetColor: WidgetColor.skyblue,
+                    widgetSize: WidgetSize.big,
+                    width: double.infinity,
                   ),
                 ),
               )

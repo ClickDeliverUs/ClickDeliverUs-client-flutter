@@ -1,10 +1,10 @@
-import 'package:cd_client/widget/input/props/input_data.dart';
-import 'package:cd_client/widget/input/props/input_default.dart';
-import 'package:cd_client/widget/input/props/input_validate_options.dart';
+import 'package:cd_client/widget/atoms/input/props/input_data.dart';
+import 'package:cd_client/widget/atoms/input/props/input_default.dart';
+import 'package:cd_client/widget/atoms/input/props/input_validate_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../util/constant/custom_color.dart';
-import '../../util/constant/standard.dart';
+import '../../../util/constant/custom_color.dart';
+import '../../../util/constant/standard.dart';
 
 class InputAuth extends StatefulWidget {
   final InputDefault inputDefault;

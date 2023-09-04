@@ -1,6 +1,6 @@
 import 'package:cd_client/util/constant/standard.dart';
-import 'package:cd_client/widget/button/btn_product.dart';
-import 'package:cd_client/widget/button/btn_product_category.dart';
+import 'package:cd_client/widget/atoms/btn_product.dart';
+import 'package:cd_client/widget/atoms/button/btn_product_category.dart';
 import 'package:flutter/material.dart';
 import 'shopping.dart';
 
@@ -168,7 +168,7 @@ class _StoreIndexState extends State<StoreIndex> {
             ),
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return const BtnProduct();
+                return const ProductContainer();
               },
               childCount: 200,
             ),

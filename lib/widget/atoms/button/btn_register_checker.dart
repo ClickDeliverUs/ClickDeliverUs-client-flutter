@@ -1,7 +1,7 @@
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:flutter/material.dart';
-import '../../util/constant/custom_color.dart';
-import '../../util/helper/common.dart';
+import '../../../util/constant/custom_color.dart';
+import '../../../util/helper/common.dart';
 
 class BtnRegisterChecker extends StatefulWidget {
   final String value;

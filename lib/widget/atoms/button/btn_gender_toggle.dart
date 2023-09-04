@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../util/constant/custom_color.dart';
-import '../../util/constant/standard.dart';
+import '../../../util/constant/custom_color.dart';
+import '../../../util/constant/standard.dart';
 
 class BtnGenderToggle extends StatelessWidget {
   final List<bool> gender;

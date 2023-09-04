@@ -51,7 +51,7 @@ class PrimaryBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      height: widgetSize == WidgetSize.big ? 57 : 45,
+      height: widgetSize == WidgetSize.big ? 55 : 45,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
