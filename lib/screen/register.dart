@@ -231,177 +231,184 @@ class _RegisterState extends State<Register> {
               const EdgeInsets.symmetric(horizontal: Standard.defaultPadding),
           child: SingleChildScrollView(
             child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        containerTitle("계정 정보를 입력해 주세요"),
-                        Column(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      containerTitle("계정 정보를 입력해 주세요"),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 240,
+                                child: InputAuth(
+                                  inputDefault: InputDefault(
+                                    labelText: "아이디  [영문, 숫자]",
+                                    icon: Icons.email,
+                                  ),
+                                  inputData: InputData(
+                                      textEditingController:
+                                          _textEditingControllers[0],
+                                      maxLength: 14),
+                                  inputValidateOptions: InputValidateOptions(
+                                      condition: _isIdAvailable,
+                                      text: _idErrorText()),
+                                  textInputFormatter: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z0-9]')),
+                                  ],
+                                ),
+                              ),
+                              ValueListenableBuilder(
+                                valueListenable: _textEditingControllers[0],
+                                builder: (BuildContext context, value,
+                                    Widget? child) {
+                                  return BtnRegisterChecker(
+                                    value: _textEditingControllers[0].text,
+                                    setIsIdAvailable: _setIsIdAvailable,
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          SizedBox(
+                            height: 150,
+                            child: Column(
+                              children: [
+                                InputAuth(
+                                  inputDefault: InputDefault(
+                                    labelText: "비밀번호",
+                                    icon: Icons.lock,
+                                  ),
+                                  inputData: InputData(
+                                      textEditingController:
+                                          _textEditingControllers[1],
+                                      obscureText: true),
+                                  inputValidateOptions: InputValidateOptions(
+                                    condition: _isPasswordMatches,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                InputAuth(
+                                  inputDefault: InputDefault(
+                                    labelText: "비밀번호 확인",
+                                    icon: Icons.check,
+                                  ),
+                                  inputData: InputData(
+                                      textEditingController:
+                                          _textEditingControllers[2],
+                                      obscureText: true),
+                                  inputValidateOptions: InputValidateOptions(
+                                    condition: _isPasswordMatches,
+                                    text: _passwordErrorText(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      containerTitle("회원님을 소개해 주세요"),
+                      SizedBox(
+                        height: 400,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            InputAuth(
+                              inputDefault: InputDefault(
+                                labelText: "이름",
+                                icon: Icons.person,
+                              ),
+                              inputData: InputData(
+                                  textEditingController:
+                                      _textEditingControllers[3],
+                                  maxLength: 10),
+                            ),
+                            InputAuth(
+                              inputDefault: InputDefault(
+                                labelText: "닉네임",
+                                icon: Icons.face,
+                              ),
+                              inputData: InputData(
+                                  textEditingController:
+                                      _textEditingControllers[4],
+                                  maxLength: 10),
+                            ),
+                            InputAuth(
+                              inputDefault: InputDefault(
+                                labelText: "주소",
+                                icon: Icons.location_on,
+                              ),
+                              inputData: InputData(
+                                  textEditingController:
+                                      _textEditingControllers[5],
+                                  maxLength: 50),
+                            ),
+                            InputAuth(
+                              inputDefault: InputDefault(
+                                labelText: "휴대폰  ['-' 없이 입력하세요.]",
+                                icon: Icons.phone,
+                              ),
+                              inputData: InputData(
+                                textEditingController:
+                                    _textEditingControllers[6],
+                                maxLength: 13,
+                              ),
+                              inputValidateOptions: InputValidateOptions(
+                                condition: _isTelValid,
+                                text: _telErrorText(),
+                              ),
+                              textInputFormatter: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                Telformat(),
+                              ],
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
                                   width: 240,
-                                  child: InputAuth(
-                                    inputDefault: InputDefault(
-                                      labelText: "아이디  [영문, 숫자]",
-                                      icon: Icons.email,
-                                    ),
-                                    inputData: InputData(
-                                        textEditingController:
-                                            _textEditingControllers[0],
-                                        maxLength: 14),
-                                    inputValidateOptions: InputValidateOptions(
-                                        condition: _isIdAvailable,
-                                        text: _idErrorText()),
-                                    textInputFormatter: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[a-zA-Z0-9]')),
-                                    ],
+                                  child: PickerAuth(
+                                    icon: Icons.cake,
+                                    onTap: _setBirth,
+                                    value: CommonHelper.dateFormatFull(_birth),
                                   ),
                                 ),
-                                ValueListenableBuilder(
-                                  valueListenable: _textEditingControllers[0],
-                                  builder: (BuildContext context, value,
-                                      Widget? child) {
-                                    return BtnRegisterChecker(
-                                      value: _textEditingControllers[0].text,
-                                      setIsIdAvailable: _setIsIdAvailable,
-                                    );
-                                  },
+                                BtnGenderToggle(
+                                  gender: _gender,
+                                  onPressed: _setGender,
                                 )
                               ],
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            SizedBox(
-                              height: 150,
-                              child: Column(
-                                children: [
-                                  InputAuth(
-                                    inputDefault: InputDefault(
-                                      labelText: "비밀번호",
-                                      icon: Icons.lock,
-                                    ),
-                                    inputData: InputData(
-                                        textEditingController:
-                                            _textEditingControllers[1],
-                                        obscureText: true),
-                                    inputValidateOptions: InputValidateOptions(
-                                        condition: _isPasswordMatches),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  InputAuth(
-                                    inputDefault: InputDefault(
-                                      labelText: "비밀번호 확인",
-                                      icon: Icons.check,
-                                    ),
-                                    inputData: InputData(
-                                        textEditingController:
-                                            _textEditingControllers[2],
-                                        obscureText: true),
-                                    inputValidateOptions: InputValidateOptions(
-                                        condition: _isPasswordMatches,
-                                        text: _passwordErrorText()),
-                                  ),
-                                ],
-                              ),
-                            )
                           ],
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        containerTitle("회원님을 소개해 주세요"),
-                        SizedBox(
-                          height: 400,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                InputAuth(
-                                    inputDefault: InputDefault(
-                                      labelText: "이름",
-                                      icon: Icons.person,
-                                    ),
-                                    inputData: InputData(
-                                        textEditingController:
-                                            _textEditingControllers[3],
-                                        maxLength: 10)),
-                                InputAuth(
-                                    inputDefault: InputDefault(
-                                      labelText: "닉네임",
-                                      icon: Icons.face,
-                                    ),
-                                    inputData: InputData(
-                                        textEditingController:
-                                            _textEditingControllers[4],
-                                        maxLength: 10)),
-                                InputAuth(
-                                    inputDefault: InputDefault(
-                                      labelText: "주소",
-                                      icon: Icons.location_on,
-                                    ),
-                                    inputData: InputData(
-                                        textEditingController:
-                                            _textEditingControllers[5],
-                                        maxLength: 50)),
-                                InputAuth(
-                                  inputDefault: InputDefault(
-                                    labelText: "휴대폰  ['-' 없이 입력하세요.]",
-                                    icon: Icons.phone,
-                                  ),
-                                  inputData: InputData(
-                                    textEditingController:
-                                        _textEditingControllers[6],
-                                    maxLength: 13,
-                                  ),
-                                  inputValidateOptions: InputValidateOptions(
-                                      condition: _isTelValid,
-                                      text: _telErrorText()),
-                                  textInputFormatter: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    Telformat(),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: 240,
-                                      child: PickerAuth(
-                                          icon: Icons.cake,
-                                          onTap: _setBirth,
-                                          value: CommonHelper.dateFormatFull(
-                                              _birth)),
-                                    ),
-                                    BtnGenderToggle(
-                                      gender: _gender,
-                                      onPressed: _setGender,
-                                    )
-                                  ],
-                                ),
-                              ]),
                         ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
-                      child: BtnSubmit(
-                          name: "가입하기",
-                          backgroundColor: CustomColor.indigo,
-                          foregroundColor: CustomColor.white,
-                          onPressed: _submitForm),
-                    ),
-                  ],
-                )),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30),
+                    child: BtnSubmit(
+                        name: "가입하기",
+                        backgroundColor: CustomColor.indigo,
+                        foregroundColor: CustomColor.white,
+                        onPressed: _submitForm),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

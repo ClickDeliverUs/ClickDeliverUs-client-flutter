@@ -13,14 +13,16 @@ class _HomeState extends State<Info> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Info"),
-          centerTitle: true,
-          backgroundColor: CustomColor.indigo,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);},
-          )),
+        title: const Text("Info"),
+        centerTitle: true,
+        backgroundColor: CustomColor.indigo,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Column(
         children: <Widget>[
           const SizedBox(height: 30.0),
@@ -37,7 +39,8 @@ class _HomeState extends State<Info> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Name",
+                    Text(
+                      "Name",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20.0,

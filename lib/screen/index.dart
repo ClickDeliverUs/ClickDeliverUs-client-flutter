@@ -21,34 +21,37 @@ class Index extends StatelessWidget {
           children: [
             const Expanded(
               child: Center(
-                  child: Text(
-                "ClickDeliverUs",
-                style: TextStyle(fontSize: 25, fontFamily: "KCC-Ganpan"),
-              )),
+                child: Text(
+                  "ClickDeliverUs",
+                  style: TextStyle(fontSize: 25, fontFamily: "KCC-Ganpan"),
+                ),
+              ),
             ),
             const SizedBox(
               height: 300,
               child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  BtnOAuth2Login(socialEnum: SocialEnum.kakao),
-                  BtnOAuth2Login(socialEnum: SocialEnum.naver),
-                  BtnOAuth2Login(socialEnum: SocialEnum.facebook),
-                  BtnOAuth2Login(socialEnum: SocialEnum.google),
-                ],
-              )),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    BtnOAuth2Login(socialEnum: SocialEnum.kakao),
+                    BtnOAuth2Login(socialEnum: SocialEnum.naver),
+                    BtnOAuth2Login(socialEnum: SocialEnum.facebook),
+                    BtnOAuth2Login(socialEnum: SocialEnum.google),
+                  ],
+                ),
+              ),
             ),
             BtnAuthOptions(
-                height: 100,
-                textL: "아이디로 로그인",
-                textR: "아이디로 회원가입",
-                onPressedL: () {
-                  CommonHelper.navigateScreen(context, const Login());
-                },
-                onPressedR: () {
-                  CommonHelper.navigateScreen(context, const Register());
-                })
+              height: 100,
+              textL: "아이디로 로그인",
+              textR: "아이디로 회원가입",
+              onPressedL: () {
+                CommonHelper.navigateScreen(context, const Login());
+              },
+              onPressedR: () {
+                CommonHelper.navigateScreen(context, const Register());
+              },
+            )
           ],
         ),
       ),

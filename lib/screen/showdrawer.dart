@@ -53,35 +53,39 @@ class ShowDrawer extends StatelessWidget {
                 buildList(Icons.star, "이벤트", () {}),
                 buildList(Icons.settings, "설정", () {}),
                 buildList(Icons.question_mark, "도움말", () {}),
-                buildList(Icons.logout, "로그아웃", () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("로그아웃"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Index(),
-                                ),
-                              );
-                            },
-                            child: const Text("예"),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text("아니오"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }),
+                buildList(
+                  Icons.logout,
+                  "로그아웃",
+                  () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("로그아웃"),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Index(),
+                                  ),
+                                );
+                              },
+                              child: const Text("예"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("아니오"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               ],
             ),
           ),

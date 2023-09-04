@@ -11,10 +11,12 @@ Widget _storeInfo(IconData icon, String text) {
       children: [
         Icon(icon),
         const SizedBox(width: 5),
-        Text(text,
-            style: const TextStyle(
-              fontFamily: "KBO",
-            ))
+        Text(
+          text,
+          style: const TextStyle(
+            fontFamily: "KBO",
+          ),
+        )
       ],
     ),
   );
@@ -65,7 +67,8 @@ void showStoreModal(BuildContext context, TestStore store) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 16),
-                          Text(store.name,
+                          Text(
+                            store.name,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 25,
@@ -83,8 +86,10 @@ void showStoreModal(BuildContext context, TestStore store) {
                                   color: Colors.grey,
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
-                                child: const Text("open",
-                                  style: TextStyle(color: Colors.white, fontSize: 10),
+                                child: const Text(
+                                  "open",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 10),
                                 ),
                               ),
                               const Spacer(),
@@ -112,7 +117,9 @@ void showStoreModal(BuildContext context, TestStore store) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _storeInfo(Icons.location_on, store.address),
-                        _storeInfo(Icons.schedule, '${store.open.format(context)}'
+                        _storeInfo(
+                            Icons.schedule,
+                            '${store.open.format(context)}'
                             ' ~ ${store.close.format(context)}'),
                         _storeInfo(Icons.phone, store.tel),
                       ],
@@ -120,7 +127,8 @@ void showStoreModal(BuildContext context, TestStore store) {
                   ],
                 ),
               ),
-              Padding(padding: const EdgeInsets.all(10),
+              Padding(
+                padding: const EdgeInsets.all(10),
                 child: SizedBox(
                   width: 200,
                   height: 40,
@@ -131,11 +139,13 @@ void showStoreModal(BuildContext context, TestStore store) {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const StoreIndex()),
+                        MaterialPageRoute(
+                            builder: (context) => const StoreIndex()),
                       );
                     },
                   ),
-                ),)
+                ),
+              )
             ],
           ),
         ),

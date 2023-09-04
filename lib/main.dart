@@ -1,5 +1,6 @@
 import 'package:cd_client/screen/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 
@@ -24,12 +25,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Flutter Tutorial",
       theme: ThemeData(
-          fontFamily: "KBO",
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.white,
-            elevation: 0,
-          )),
+        fontFamily: "KBO",
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          elevation: 0,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+        ),
+      ),
       home: const Index(),
     );
   }

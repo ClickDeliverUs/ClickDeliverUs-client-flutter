@@ -100,11 +100,12 @@ class _StoreIndexState extends State<StoreIndex> {
             child: Column(
               children: [
                 Container(
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            Standard.defaultBorderRadius)),
-                    child: Image.asset("assets/images/store.jpeg")),
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(Standard.defaultBorderRadius)),
+                  child: Image.asset("assets/images/store.jpeg"),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: Standard.defaultPadding),

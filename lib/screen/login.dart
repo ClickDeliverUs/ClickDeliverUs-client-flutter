@@ -48,60 +48,62 @@ class _LoginState extends State<Login> {
     loggerNoStack.i("build login page");
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: const Text("로그인"),
-          centerTitle: true,
-          foregroundColor: Colors.black,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text("로그인"),
+        centerTitle: true,
+        foregroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        body: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: Standard.defaultPadding),
-          child: SizedBox(
-            height: 400,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InputAuth(
-                    inputDefault: InputDefault(
-                      labelText: "아이디",
-                      icon: Icons.email,
-                    ),
-                    inputData: InputData(textEditingController: _idController),
+      ),
+      body: Padding(
+        padding:
+            const EdgeInsets.symmetric(horizontal: Standard.defaultPadding),
+        child: SizedBox(
+          height: 400,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InputAuth(
+                  inputDefault: InputDefault(
+                    labelText: "아이디",
+                    icon: Icons.email,
                   ),
-                  InputAuth(
-                    inputDefault: InputDefault(
-                      labelText: "비밀번호",
-                      icon: Icons.lock,
-                    ),
-                    inputData: InputData(
-                        textEditingController: _passwordController,
-                        obscureText: true),
+                  inputData: InputData(textEditingController: _idController),
+                ),
+                InputAuth(
+                  inputDefault: InputDefault(
+                    labelText: "비밀번호",
+                    icon: Icons.lock,
                   ),
-                  BtnSubmit(
-                    name: "로그인",
-                    backgroundColor: CustomColor.indigo,
-                    foregroundColor: CustomColor.white,
-                    onPressed: _submitForm,
-                  ),
-                  BtnAuthOptions(
-                      height: 40,
-                      textL: "아이디 찾기",
-                      textR: "비밀번호 찾기",
-                      onPressedL: () {},
-                      onPressedR: () {})
-                ],
-              ),
+                  inputData: InputData(
+                      textEditingController: _passwordController,
+                      obscureText: true),
+                ),
+                BtnSubmit(
+                  name: "로그인",
+                  backgroundColor: CustomColor.indigo,
+                  foregroundColor: CustomColor.white,
+                  onPressed: _submitForm,
+                ),
+                BtnAuthOptions(
+                  height: 40,
+                  textL: "아이디 찾기",
+                  textR: "비밀번호 찾기",
+                  onPressedL: () {},
+                  onPressedR: () {},
+                )
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
