@@ -1,5 +1,7 @@
-import 'package:cd_client/util/constant/custom_color.dart';
+import 'package:cd_client/util/helper/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:cd_client/widget/atoms/button/primary_btn.dart';
+import 'buy.dart';
 
 class Product {
   final String name;
@@ -53,7 +55,6 @@ class _ShoppingState extends State<Shopping> {
       appBar: AppBar(
         title: const Text("장바구니"),
         centerTitle: true,
-        backgroundColor: CustomColor.indigo,
       ),
       body: Column(
         children: [
@@ -92,17 +93,18 @@ class _ShoppingState extends State<Shopping> {
           ),
           Padding(
             padding: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: SizedBox(
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    '${itemPrice()}원 / 구매하기',
-                      style: const TextStyle(fontSize: 20)
-                  ),
-                ),
-              )
+            child:  PrimaryBtn(
+              label: "${itemPrice()}원 / 구매하기",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const BuyInfo()),
+                );
+              },
+              widgetColor: WidgetColor.skyblue,
+              widgetSize: WidgetSize.small,
+              width: double.infinity,
             ),
           ),
         ],

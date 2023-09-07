@@ -131,7 +131,7 @@ void showStoreModal(BuildContext context, TestStore store) {
                 padding: const EdgeInsets.all(10),
                 child: SizedBox(
                   width: 200,
-                  height: 40,
+                  height: 30,
                   child: PrimaryBtn(
                     label: "주문",
                     onPressed: () {
