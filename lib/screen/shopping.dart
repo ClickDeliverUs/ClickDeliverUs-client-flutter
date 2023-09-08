@@ -1,7 +1,7 @@
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
-import 'buy.dart';
+import 'buystart.dart';
 
 class Product {
   final String name;
@@ -99,7 +99,8 @@ class _ShoppingState extends State<Shopping> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const BuyInfo()),
+                    builder: (context) => BuyStart(shoppingItems: shoppingItems),
+                  ),
                 );
               },
               widgetColor: WidgetColor.skyblue,

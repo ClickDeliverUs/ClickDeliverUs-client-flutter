@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
 import 'package:cd_client/widget/atoms/button/secondary_btn.dart';
+import 'shopping.dart';
+import 'buyend.dart';
 
 class BuyInfo extends StatelessWidget {
-  const BuyInfo({Key? key}) : super(key: key);
+  final List<Product> shoppingItems;
+
+  const BuyInfo({Key? key, required this.shoppingItems}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +26,32 @@ class BuyInfo extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               children: [
                 _buildHeader('구매 정보', fontSize: 18, fontWeight: FontWeight.bold),
-                _buildInfo('편의점'),
-                _buildInfo('전화번호'),
+                _buildInfo('구매 장소 : '),
+                _buildInfo('배달 장소 : '),
                 _buildDivider(),
                 _buildHeader('상품 목록'),
-                _buildInfo('상품1'),
-                _buildInfo('상품2'),
-                _buildInfo('상품3'),
-                _buildInfo('상품4'),
-                _buildInfo('상품5'),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: shoppingItems.length,
+                  itemBuilder: (context, index) {
+                    final item = shoppingItems[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(item.name),
+                            Text('${item.count}개'),
+                          ],
+                      ),
+                    );
+                  },
+                ),
                 _buildDivider(),
-                _buildInfo('상품 금액 :'),
-                _buildInfo('배달 비용 :'),
+                _buildInfo('상품 금액 : '),
+                _buildInfo('배달 비용 : '),
                 _buildDivider(),
-                _buildHeader('결제 금액 :',
+                _buildHeader('결제 금액 : ',
                     fontSize: 18, fontWeight: FontWeight.bold),
               ],
             ),
@@ -48,7 +65,13 @@ class BuyInfo extends StatelessWidget {
                   width: 150,
                   child: PrimaryBtn(
                     label: "확인",
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const BuyEnd()),
+                      );
+                    },
                     widgetColor: WidgetColor.skyblue,
                     widgetSize: WidgetSize.small,
                   ),
