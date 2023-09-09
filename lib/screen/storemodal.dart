@@ -1,8 +1,8 @@
+import 'package:cd_client/model/extrenal/store.dart';
 import 'package:cd_client/screen/store_index.dart';
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
 import 'package:flutter/material.dart';
-import 'package:cd_client/model/internal/test_store.dart';
 
 Widget _storeInfo(IconData icon, String text) {
   return Container(
@@ -22,7 +22,7 @@ Widget _storeInfo(IconData icon, String text) {
   );
 }
 
-void showStoreModal(BuildContext context, TestStore store) {
+void showStoreModal(BuildContext context, Store store) {
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
@@ -68,7 +68,7 @@ void showStoreModal(BuildContext context, TestStore store) {
                         children: [
                           const SizedBox(height: 16),
                           Text(
-                            store.name,
+                            store.cvsName,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 25,
@@ -116,12 +116,13 @@ void showStoreModal(BuildContext context, TestStore store) {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _storeInfo(Icons.location_on, store.address),
+                        _storeInfo(Icons.location_on, store.cAddress),
                         _storeInfo(
-                            Icons.schedule,
-                            '${store.open.format(context)}'
-                            ' ~ ${store.close.format(context)}'),
-                        _storeInfo(Icons.phone, store.tel),
+                          Icons.schedule,
+                          '${store.cOpen["hour"]} : ${store.cOpen["minute"]}'
+                          ' ~ ${store.cClose["hour"]} : ${store.cClose["minute"]}',
+                        ),
+                        _storeInfo(Icons.phone, store.phone),
                       ],
                     ),
                   ],
@@ -138,7 +139,7 @@ void showStoreModal(BuildContext context, TestStore store) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const StoreIndex()),
+                            builder: (context) => StoreIndex(store: store)),
                       );
                     },
                     widgetColor: WidgetColor.skyblue,

@@ -35,4 +35,11 @@ class CommonHelper {
       lastDate: DateTime(lastDate),
     );
   }
+
+  static Map<K, V> mapTypeCasting<K, V>(dynamic m) {
+    return (m as Map<String, dynamic>).map<K, V>(
+      // TODO: fix type casting
+      (k, v) => MapEntry<K, V>(k as K, v as V),
+    );
+  }
 }

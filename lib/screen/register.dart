@@ -1,4 +1,5 @@
 import 'package:cd_client/model/extrenal/request/register_req.dart';
+import 'package:cd_client/apis/auth_api.dart';
 import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/util/helper/tel_format.dart';
@@ -12,6 +13,7 @@ import 'package:cd_client/widget/atoms/input/props/input_validate_options.dart';
 import 'package:cd_client/widget/atoms/picker/picker_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../util/constant/standard.dart';
 import '../main.dart';
 
@@ -166,9 +168,11 @@ class _RegisterState extends State<Register> {
         nickName: _textEditingControllers[4].text,
         address: _textEditingControllers[5].text,
         tel: _textEditingControllers[6].text,
-        birth: _birth!,
+        birth: _birth.toString(),
         gender: _gender[0],
         isAdult: _checkAdult(_birth!));
+
+    context.read<AuthApi>().fetchRegister(registerReq);
   }
 
   Widget containerTitle(String title) {
@@ -367,6 +371,7 @@ class _RegisterState extends State<Register> {
                                     _textEditingControllers[6],
                                 maxLength: 13,
                               ),
+                              keyboardType: TextInputType.number,
                               inputValidateOptions: InputValidateOptions(
                                 condition: _isTelValid,
                                 text: _telErrorText(),

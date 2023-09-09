@@ -11,13 +11,15 @@ class InputAuth extends StatefulWidget {
   final InputData inputData;
   final InputValidateOptions? inputValidateOptions;
   final List<TextInputFormatter>? textInputFormatter;
+  final TextInputType? keyboardType;
 
   const InputAuth(
       {super.key,
       required this.inputDefault,
       required this.inputData,
       this.inputValidateOptions,
-      this.textInputFormatter});
+      this.textInputFormatter,
+      this.keyboardType});
 
   @override
   State<InputAuth> createState() => _InputAuthState();
@@ -68,6 +70,7 @@ class _InputAuthState extends State<InputAuth> {
       inputFormatters: widget.textInputFormatter,
       obscureText: widget.inputData.obscureText == true ? true : false,
       maxLength: widget.inputData.maxLength,
+      keyboardType: widget.keyboardType,
       style: const TextStyle(fontSize: 12, fontFamily: "KBO"),
       decoration: InputDecoration(
           // floatingLabelBehavior: FloatingLabelBehavior.never,

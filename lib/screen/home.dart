@@ -1,9 +1,9 @@
-import 'package:cd_client/model/internal/test_store.dart';
+import 'package:cd_client/apis/store_api.dart';
+import 'package:cd_client/model/extrenal/store.dart';
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
-import 'package:cd_client/widget/atoms/button/secondary_btn.dart';
-import 'package:cd_client/widget/atoms/button/tertiary_btn.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'storemodal.dart';
 import 'showdrawer.dart';
 
@@ -15,30 +15,23 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  TestStore store1 = TestStore(
-    name: '편의점 1',
-    address: '123',
-    open: const TimeOfDay(hour: 9, minute: 0),
-    close: const TimeOfDay(hour: 17, minute: 0),
-    tel: '010-123-123',
-  );
-  TestStore store2 = TestStore(
-    name: '편의점 2',
-    address: '456',
-    open: const TimeOfDay(hour: 5, minute: 0),
-    close: const TimeOfDay(hour: 22, minute: 0),
-    tel: '010-456-456',
-  );
-  TestStore store3 = TestStore(
-    name: '편의점 3',
-    address: '789',
-    open: const TimeOfDay(hour: 0, minute: 0),
-    close: const TimeOfDay(hour: 24, minute: 0),
-    tel: '010-789-789',
-  );
+  List<Store> stores = [];
 
-  void _modalHandler(TestStore store) {
+  void _modalHandler(Store store) {
     showStoreModal(context, store);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      List<Store> storeData = await context.read<StoreApi>().fetchStoreList();
+
+      setState(() {
+        stores = storeData;
+      });
+    });
   }
 
   @override
@@ -59,41 +52,20 @@ class _HomeState extends State<Home> {
       endDrawer: const ShowDrawer(),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            PrimaryBtn(
-              label: "편의점 1",
-              onPressed: () {
-                _modalHandler(store1);
-              },
-              widgetColor: WidgetColor.skyblue,
-              widgetSize: WidgetSize.big,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SecondaryBtn(
-              label: "편의점 2",
-              onPressed: () {
-                _modalHandler(store2);
-              },
-              widgetColor: WidgetColor.skyblue,
-              widgetSize: WidgetSize.small,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TertiaryBtn(
-              label: "편의점 3",
-              onPressed: () {
-                _modalHandler(store3);
-              },
-            ),
-          ],
-        ),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(stores.length, (index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: PrimaryBtn(
+                  label: "편의점 $index",
+                  onPressed: () {
+                    _modalHandler(stores[index]);
+                  },
+                  widgetColor: WidgetColor.skyblue,
+                  widgetSize: WidgetSize.big,
+                ),
+              );
+            })),
       ),
     );
   }

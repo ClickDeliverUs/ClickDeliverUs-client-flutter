@@ -3,12 +3,12 @@ class UserAccount {
   final String userName;
   final String nickName;
   final String email;
-  final String birth;
+  final DateTime birth;
   final String address;
   final String tel;
   final bool isAdult;
-  final String accessToken;
-  final String refreshToken;
+  final String? accessToken;
+  final String? refreshToken;
 
   UserAccount(
       {required this.uid,
@@ -19,8 +19,20 @@ class UserAccount {
       required this.address,
       required this.tel,
       required this.isAdult,
-      required this.accessToken,
-      required this.refreshToken});
+      this.accessToken,
+      this.refreshToken});
+
+  UserAccount.init()
+      : uid = 0,
+        userName = "",
+        nickName = "",
+        email = "",
+        birth = DateTime.now(),
+        address = "",
+        tel = "",
+        isAdult = false,
+        accessToken = "",
+        refreshToken = "";
 
   factory UserAccount.fromJson(Map<String, dynamic> json) {
     return UserAccount(
@@ -37,8 +49,3 @@ class UserAccount {
     );
   }
 }
-
-
-
-// 1. 이름이 있는 생성자
-// 2. 이름이 없는 생성자

@@ -1,11 +1,17 @@
+import 'package:cd_client/apis/product_api.dart';
+import 'package:cd_client/model/extrenal/product.dart';
+import 'package:cd_client/model/extrenal/store.dart';
+import 'package:cd_client/screen/shopping.dart';
 import 'package:cd_client/util/constant/standard.dart';
 import 'package:cd_client/widget/atoms/btn_product.dart';
 import 'package:cd_client/widget/atoms/button/btn_product_category.dart';
 import 'package:flutter/material.dart';
-import 'shopping.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StoreIndex extends StatefulWidget {
-  const StoreIndex({super.key});
+  final Store store;
+
+  const StoreIndex({super.key, required this.store});
 
   @override
   State<StoreIndex> createState() => _StoreIndexState();
@@ -15,6 +21,7 @@ class _StoreIndexState extends State<StoreIndex> {
   final ScrollController _scrollController = ScrollController();
   Color _appbarLeadingColor = Colors.white;
   double _appbarOpacity = 0.0;
+  List<Product> productList = [];
 
   void _appbarLeadingListener() {
     setState(() {
@@ -53,6 +60,24 @@ class _StoreIndexState extends State<StoreIndex> {
     super.initState();
     _scrollController.addListener(_appbarLeadingListener);
     _scrollController.addListener(_appbarOpacityListener);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Map<String, List<Product>> r = await context
+          .read<ProductApi>()
+          .getProductByStoreId(widget.store.sid);
+
+      List<List<Product>> rawList = r.values.toList();
+
+      List<Product> l = [];
+
+      for (List<Product> sublist in rawList) {
+        l.addAll(sublist);
+      }
+
+      setState(() {
+        productList = l;
+      });
+    });
   }
 
   @override
@@ -119,18 +144,18 @@ class _StoreIndexState extends State<StoreIndex> {
                           children: [
                             Container(
                               margin: const EdgeInsets.symmetric(vertical: 30),
-                              child: const Text(
-                                "GS25 10호관점",
-                                style: TextStyle(
+                              child: Text(
+                                widget.store.cvsName,
+                                style: const TextStyle(
                                     fontFamily: "KBO",
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
                             _storeInfo(
-                                Icons.location_on, "경기 성남시 수정구 복정동 423-8"),
+                                Icons.location_on, widget.store.cAddress),
                             _storeInfo(Icons.schedule, "24시간 영업"),
-                            _storeInfo(Icons.phone, "031-123-4567"),
+                            _storeInfo(Icons.phone, widget.store.phone),
                           ],
                         ),
                       ),
@@ -162,17 +187,20 @@ class _StoreIndexState extends State<StoreIndex> {
               ],
             ),
           ),
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
+          if (productList.isNotEmpty)
+            SliverGrid(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return ProductContainer(
+                    product: productList[index],
+                  );
+                },
+                childCount: 200,
+              ),
             ),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return const ProductContainer();
-              },
-              childCount: 200,
-            ),
-          ),
         ],
       ),
     );

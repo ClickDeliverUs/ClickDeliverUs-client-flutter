@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
 import 'buystart.dart';
 
-class Product {
+class ProductTemp {
   final String name;
   final int price;
   int count;
 
-  Product(this.name, this.price, this.count);
+  ProductTemp(this.name, this.price, this.count);
 }
 
 class Shopping extends StatefulWidget {
@@ -19,12 +19,12 @@ class Shopping extends StatefulWidget {
 }
 
 class _ShoppingState extends State<Shopping> {
-  List<Product> shoppingItems = [
-    Product('상품 1', 1000, 1),
-    Product('상품 2', 2000, 1),
-    Product('상품 3', 1500, 1),
-    Product('상품 4', 500, 1),
-    Product('상품 5', 2500, 1),
+  List<ProductTemp> shoppingItems = [
+    ProductTemp('상품 1', 1000, 1),
+    ProductTemp('상품 2', 2000, 1),
+    ProductTemp('상품 3', 1500, 1),
+    ProductTemp('상품 4', 500, 1),
+    ProductTemp('상품 5', 2500, 1),
   ];
 
   int itemPrice() {
@@ -42,7 +42,7 @@ class _ShoppingState extends State<Shopping> {
   }
 
   void itemMinus(int index) {
-    if (shoppingItems[index].count > 0 ) {
+    if (shoppingItems[index].count > 0) {
       setState(() {
         shoppingItems[index].count--;
       });
@@ -56,18 +56,19 @@ class _ShoppingState extends State<Shopping> {
         title: const Text("장바구니"),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.separated(
+      body: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Expanded(
+                child: ListView.separated(
               itemCount: shoppingItems.length,
               separatorBuilder: (context, index) => const Divider(thickness: 1),
               itemBuilder: (context, index) {
                 final product = shoppingItems[index];
                 return ListTile(
-                  title: Text(product.name,
-                      style: const TextStyle(fontSize: 20)
-                  ),
+                  title:
+                      Text(product.name, style: const TextStyle(fontSize: 20)),
                   subtitle: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -89,26 +90,27 @@ class _ShoppingState extends State<Shopping> {
                   ),
                 );
               },
-            )
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child:  PrimaryBtn(
-              label: "${itemPrice()}원 / 구매하기",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BuyStart(shoppingItems: shoppingItems),
-                  ),
-                );
-              },
-              widgetColor: WidgetColor.skyblue,
-              widgetSize: WidgetSize.small,
-              width: double.infinity,
+            )),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: PrimaryBtn(
+                label: "${itemPrice()}원 / 구매하기",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          BuyStart(shoppingItems: shoppingItems),
+                    ),
+                  );
+                },
+                widgetColor: WidgetColor.skyblue,
+                widgetSize: WidgetSize.small,
+                width: double.infinity,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

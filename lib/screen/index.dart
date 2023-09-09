@@ -28,14 +28,12 @@ class Index extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 300,
+              height: 180,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     OAuth2Btn(socialEnum: SocialEnum.kakao),
-                    OAuth2Btn(socialEnum: SocialEnum.naver),
-                    OAuth2Btn(socialEnum: SocialEnum.facebook),
                     OAuth2Btn(socialEnum: SocialEnum.google),
                   ],
                 ),
