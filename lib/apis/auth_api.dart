@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:cd_client/main.dart';
 import 'package:cd_client/model/extrenal/request/register_req.dart';
 import 'package:cd_client/model/extrenal/user_account.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,8 +12,6 @@ class AuthApi {
     Response response = await http.post(Uri.parse("$path/signup"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(registerReq.toJSon()));
-
-    loggerNoStack.i(response);
 
     if (response.statusCode == 201) {
       // final bool responseData = jsonDecode(response.body);

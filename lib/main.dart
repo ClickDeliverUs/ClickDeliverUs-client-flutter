@@ -6,6 +6,7 @@ import 'package:cd_client/screen/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,6 +20,7 @@ var loggerNoStack = Logger(
 
 void main() async {
   await dotenv.load();
+  AuthRepository.initialize(appKey: dotenv.env["KAKAO_KEY_JS"]!);
 
   runApp(const MyApp());
 }

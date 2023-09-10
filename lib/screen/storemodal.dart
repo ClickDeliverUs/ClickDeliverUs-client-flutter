@@ -1,5 +1,6 @@
 import 'package:cd_client/model/extrenal/store.dart';
 import 'package:cd_client/screen/store_index.dart';
+import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
 import 'package:flutter/material.dart';
@@ -47,12 +48,13 @@ void showStoreModal(BuildContext context, Store store) {
                 children: [
                   Container(
                     height: 180,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(20.0),
                       ),
                       image: DecorationImage(
-                        image: AssetImage("assets/images/store.jpeg"),
+                        image:
+                            AssetImage("assets/images/${store.cvsName}.jpeg"),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -119,10 +121,11 @@ void showStoreModal(BuildContext context, Store store) {
                         _storeInfo(Icons.location_on, store.cAddress),
                         _storeInfo(
                           Icons.schedule,
-                          '${store.cOpen["hour"]} : ${store.cOpen["minute"]}'
-                          ' ~ ${store.cClose["hour"]} : ${store.cClose["minute"]}',
+                          '${CommonHelper.addLeadingZero(store.cOpen["hour"])} : ${CommonHelper.addLeadingZero(store.cOpen["minute"])}'
+                          ' ~ ${CommonHelper.addLeadingZero(store.cClose["hour"])} : ${CommonHelper.addLeadingZero(store.cClose["minute"])}',
                         ),
-                        _storeInfo(Icons.phone, store.phone),
+                        _storeInfo(
+                            Icons.phone, CommonHelper.telFormat(store.phone)),
                       ],
                     ),
                   ],

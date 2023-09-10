@@ -1,9 +1,8 @@
 import 'package:cd_client/apis/store_api.dart';
 import 'package:cd_client/model/extrenal/store.dart';
-import 'package:cd_client/util/helper/enum.dart';
-import 'package:cd_client/widget/atoms/button/primary_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'storemodal.dart';
 import 'showdrawer.dart';
 
@@ -15,6 +14,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late KakaoMapController mapController;
+  Set<Marker> markers = {};
   List<Store> stores = [];
 
   void _modalHandler(Store store) {
@@ -50,23 +51,55 @@ class _HomeState extends State<Home> {
         ),
       ),
       endDrawer: const ShowDrawer(),
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(stores.length, (index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: PrimaryBtn(
-                  label: "편의점 $index",
-                  onPressed: () {
-                    _modalHandler(stores[index]);
-                  },
-                  widgetColor: WidgetColor.skyblue,
-                  widgetSize: WidgetSize.big,
-                ),
-              );
-            })),
+      body: KakaoMap(
+        onMapCreated: ((controller) {
+          mapController = controller;
+
+          markers.add(Marker(
+            markerId: UniqueKey().toString(),
+            latLng: LatLng(37.459718915969816, 127.12671105754838),
+          ));
+
+          markers.add(Marker(
+            markerId: UniqueKey().toString(),
+            latLng: LatLng(37.45852039661522, 127.12687292453977),
+          ));
+
+          markers.add(Marker(
+            markerId: UniqueKey().toString(),
+            latLng: LatLng(37.45782624200757, 127.12722213247909),
+          ));
+
+          setState(() {});
+        }),
+        onMarkerTap: (markerId, latLng, zoomLevel) {
+          int idx = markers
+              .toList()
+              .indexWhere((element) => element.markerId == markerId);
+          _modalHandler(stores[idx]);
+        },
+        markers: markers.toList(),
+        center: LatLng(37.459718915969816, 127.12671105754838),
+        zoomControl: true,
       ),
     );
   }
 }
+
+//  Center(
+//         child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: List.generate(stores.length, (index) {
+//               return Padding(
+//                 padding: const EdgeInsets.symmetric(vertical: 10),
+//                 child: PrimaryBtn(
+//                   label: "편의점 $index",
+//                   onPressed: () {
+//                     _modalHandler(stores[index]);
+//                   },
+//                   widgetColor: WidgetColor.skyblue,
+//                   widgetSize: WidgetSize.big,
+//                 ),
+//               );
+//             })),
+//       ),

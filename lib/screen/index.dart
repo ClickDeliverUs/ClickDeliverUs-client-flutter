@@ -44,10 +44,10 @@ class Index extends StatelessWidget {
               textL: "아이디로 로그인",
               textR: "아이디로 회원가입",
               onPressedL: () {
-                CommonHelper.navigateScreen(context, const Login());
+                CommonHelper.pushScreen(context, const Login());
               },
               onPressedR: () {
-                CommonHelper.navigateScreen(context, const Register());
+                CommonHelper.pushScreen(context, const Register());
               },
             )
           ],

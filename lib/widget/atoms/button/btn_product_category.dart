@@ -3,16 +3,18 @@ import '../../../util/constant/standard.dart';
 
 class BtnProductCategory extends StatelessWidget {
   final String title;
+  final void Function() onPressed;
 
-  const BtnProductCategory({super.key, required this.title});
+  const BtnProductCategory(
+      {super.key, required this.title, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 75,
+      width: 90,
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ElevatedButton(
-          onPressed: () {},
+          onPressed: onPressed,
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black12,
               shape: RoundedRectangleBorder(

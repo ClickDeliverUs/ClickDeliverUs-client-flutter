@@ -28,6 +28,8 @@ class _BuyInfoState extends State<BuyInfo> {
   String androidApplicationId = dotenv.env['BOOTPAY_ANDROID']!;
   String iosApplicationId = dotenv.env['BOOTPAY_IOS']!;
 
+  bool isPurchaseEnd = false;
+
   String get applicationId {
     return Bootpay().applicationId(
         webApplicationId, androidApplicationId, iosApplicationId);
@@ -124,7 +126,9 @@ class _BuyInfoState extends State<BuyInfo> {
       onClose: () {
         print('------- onClose');
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        CommonHelper.navigateScreen(context, const BuyEnd());
+        if (isPurchaseEnd) {
+          CommonHelper.pushRemoveScreen(context, const BuyEnd());
+        }
         //TODO - 원하시는 라우터로 페이지 이동
       },
 
@@ -151,7 +155,9 @@ class _BuyInfoState extends State<BuyInfo> {
       },
       onDone: (String data) {
         print('------- onDone: $data');
-        CommonHelper.navigateScreen(context, const BuyEnd());
+        setState(() {
+          isPurchaseEnd = true;
+        });
       },
     );
   }

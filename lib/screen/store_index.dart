@@ -1,8 +1,11 @@
 import 'package:cd_client/apis/product_api.dart';
 import 'package:cd_client/model/extrenal/product.dart';
+import 'package:cd_client/model/extrenal/product_list.dart';
 import 'package:cd_client/model/extrenal/store.dart';
 import 'package:cd_client/screen/shopping.dart';
 import 'package:cd_client/util/constant/standard.dart';
+import 'package:cd_client/util/helper/common.dart';
+import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/widget/atoms/btn_product.dart';
 import 'package:cd_client/widget/atoms/button/btn_product_category.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +24,8 @@ class _StoreIndexState extends State<StoreIndex> {
   final ScrollController _scrollController = ScrollController();
   Color _appbarLeadingColor = Colors.white;
   double _appbarOpacity = 0.0;
-  List<Product> productList = [];
+  ProductList productList = ProductList.init();
+  List<Product> currentProductList = [];
 
   void _appbarLeadingListener() {
     setState(() {
@@ -37,6 +41,76 @@ class _StoreIndexState extends State<StoreIndex> {
         _appbarOpacity = _scrollController.position.pixels / 100;
       });
     }
+  }
+
+  List<Product> _allProductLists() {
+    return productList.alcohols +
+        productList.beverages +
+        productList.candys +
+        productList.frozens +
+        productList.ices +
+        productList.instants +
+        productList.instants +
+        productList.lifeuses +
+        productList.medics +
+        productList.mliks +
+        productList.noodles +
+        productList.onedates +
+        productList.snacks +
+        productList.tobaccos;
+  }
+
+  void _setCurrentProductList(ProductCategory category) {
+    List<Product> pd = [];
+
+    switch (category) {
+      case ProductCategory.alcohols:
+        pd = productList.alcohols;
+        break;
+      case ProductCategory.beverages:
+        pd = productList.beverages;
+        break;
+      case ProductCategory.candys:
+        pd = productList.candys;
+        break;
+      case ProductCategory.frozens:
+        pd = productList.frozens;
+        break;
+      case ProductCategory.ices:
+        pd = productList.ices;
+        break;
+      case ProductCategory.instants:
+        pd = productList.instants;
+        break;
+      case ProductCategory.lifeuses:
+        pd = productList.lifeuses;
+        break;
+      case ProductCategory.medics:
+        pd = productList.medics;
+        break;
+      case ProductCategory.mliks:
+        pd = productList.mliks;
+        break;
+      case ProductCategory.noodles:
+        pd = productList.noodles;
+        break;
+      case ProductCategory.onedates:
+        pd = productList.onedates;
+        break;
+      case ProductCategory.snacks:
+        pd = productList.snacks;
+        break;
+      case ProductCategory.tobaccos:
+        pd = productList.tobaccos;
+        break;
+      default:
+        pd = _allProductLists();
+        break;
+    }
+
+    setState(() {
+      currentProductList = pd;
+    });
   }
 
   Widget _storeInfo(IconData icon, String text) {
@@ -62,20 +136,18 @@ class _StoreIndexState extends State<StoreIndex> {
     _scrollController.addListener(_appbarOpacityListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Map<String, List<Product>> r = await context
+      ProductList pd = await context
           .read<ProductApi>()
           .getProductByStoreId(widget.store.sid);
 
-      List<List<Product>> rawList = r.values.toList();
+      setState(() {
+        productList = pd;
+      });
 
-      List<Product> l = [];
-
-      for (List<Product> sublist in rawList) {
-        l.addAll(sublist);
-      }
+      List<Product> cpd = _allProductLists();
 
       setState(() {
-        productList = l;
+        currentProductList = cpd;
       });
     });
   }
@@ -125,11 +197,16 @@ class _StoreIndexState extends State<StoreIndex> {
             child: Column(
               children: [
                 Container(
+                  width: double.infinity,
+                  height: 250,
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                       borderRadius:
                           BorderRadius.circular(Standard.defaultBorderRadius)),
-                  child: Image.asset("assets/images/store.jpeg"),
+                  child: Image.asset(
+                    "assets/images/${widget.store.cvsName}.jpeg",
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -154,8 +231,12 @@ class _StoreIndexState extends State<StoreIndex> {
                             ),
                             _storeInfo(
                                 Icons.location_on, widget.store.cAddress),
-                            _storeInfo(Icons.schedule, "24시간 영업"),
-                            _storeInfo(Icons.phone, widget.store.phone),
+                            _storeInfo(
+                                Icons.schedule,
+                                '${CommonHelper.addLeadingZero(widget.store.cOpen["hour"])} : ${CommonHelper.addLeadingZero(widget.store.cOpen["minute"])}'
+                                ' ~ ${CommonHelper.addLeadingZero(widget.store.cClose["hour"])} : ${CommonHelper.addLeadingZero(widget.store.cClose["minute"])}'),
+                            _storeInfo(Icons.phone,
+                                CommonHelper.telFormat(widget.store.phone)),
                           ],
                         ),
                       ),
@@ -170,14 +251,88 @@ class _StoreIndexState extends State<StoreIndex> {
                         height: 35,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
-                          children: const [
-                            BtnProductCategory(title: "전체"),
-                            BtnProductCategory(title: "전체"),
-                            BtnProductCategory(title: "전체"),
-                            BtnProductCategory(title: "전체"),
-                            BtnProductCategory(title: "전체"),
-                            BtnProductCategory(title: "전체"),
-                            BtnProductCategory(title: "전체"),
+                          children: [
+                            BtnProductCategory(
+                                title: "전체",
+                                onPressed: () {
+                                  _setCurrentProductList(ProductCategory.all);
+                                }),
+                            BtnProductCategory(
+                                title: "주류",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.alcohols);
+                                }),
+                            BtnProductCategory(
+                                title: "음료",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.beverages);
+                                }),
+                            BtnProductCategory(
+                                title: "사탕",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.candys);
+                                }),
+                            BtnProductCategory(
+                                title: "냉동식품",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.frozens);
+                                }),
+                            BtnProductCategory(
+                                title: "아이스크림",
+                                onPressed: () {
+                                  _setCurrentProductList(ProductCategory.ices);
+                                }),
+                            BtnProductCategory(
+                                title: "즉석식품",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.instants);
+                                }),
+                            BtnProductCategory(
+                                title: "생활용품",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.lifeuses);
+                                }),
+                            BtnProductCategory(
+                                title: "의약품",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.medics);
+                                }),
+                            BtnProductCategory(
+                                title: "유제품",
+                                onPressed: () {
+                                  _setCurrentProductList(ProductCategory.mliks);
+                                }),
+                            BtnProductCategory(
+                                title: "면류",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.noodles);
+                                }),
+                            BtnProductCategory(
+                                title: "즉석식품",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.onedates);
+                                }),
+                            BtnProductCategory(
+                                title: "과자류",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.snacks);
+                                }),
+                            BtnProductCategory(
+                                title: "담배",
+                                onPressed: () {
+                                  _setCurrentProductList(
+                                      ProductCategory.tobaccos);
+                                }),
                           ],
                         ),
                       )
@@ -187,7 +342,7 @@ class _StoreIndexState extends State<StoreIndex> {
               ],
             ),
           ),
-          if (productList.isNotEmpty)
+          if (currentProductList.isNotEmpty)
             SliverGrid(
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
@@ -195,10 +350,10 @@ class _StoreIndexState extends State<StoreIndex> {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return ProductContainer(
-                    product: productList[index],
+                    product: currentProductList[index],
                   );
                 },
-                childCount: 200,
+                childCount: currentProductList.length,
               ),
             ),
         ],

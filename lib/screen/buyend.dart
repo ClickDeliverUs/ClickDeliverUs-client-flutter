@@ -1,3 +1,4 @@
+import 'package:cd_client/util/helper/common.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
@@ -33,10 +34,7 @@ class BuyEnd extends StatelessWidget {
               PrimaryBtn(
                 label: "홈 화면으로 이동",
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Home()),
-                  );
+                  CommonHelper.pushRemoveScreen(context, const Home());
                 },
                 widgetColor: WidgetColor.skyblue,
                 widgetSize: WidgetSize.small,

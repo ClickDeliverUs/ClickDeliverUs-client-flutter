@@ -1,5 +1,8 @@
-import 'package:cd_client/util/helper/common.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'store.g.dart';
+
+@JsonSerializable()
 class Store {
   final int sid;
   final String cvsName;
@@ -16,14 +19,6 @@ class Store {
       required this.cOpen,
       required this.cClose});
 
-  factory Store.fromJson(Map<String, dynamic> json) {
-    return Store(
-      sid: json["sid"],
-      cvsName: json["cvsName"],
-      cAddress: json["cAddress"],
-      phone: json["phone"],
-      cOpen: CommonHelper.mapTypeCasting<String, int>(json["cOpen"]),
-      cClose: CommonHelper.mapTypeCasting<String, int>(json["cClose"]),
-    );
-  }
+  factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
+  Map<String, dynamic> toJson() => _$StoreToJson(this);
 }
