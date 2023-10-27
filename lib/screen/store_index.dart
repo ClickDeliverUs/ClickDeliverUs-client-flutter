@@ -1,6 +1,5 @@
 import 'package:cd_client/apis/product_api.dart';
 import 'package:cd_client/model/extrenal/product.dart';
-import 'package:cd_client/model/extrenal/product_list.dart';
 import 'package:cd_client/model/extrenal/store.dart';
 import 'package:cd_client/screen/shopping.dart';
 import 'package:cd_client/util/constant/standard.dart';
@@ -24,7 +23,7 @@ class _StoreIndexState extends State<StoreIndex> {
   final ScrollController _scrollController = ScrollController();
   Color _appbarLeadingColor = Colors.white;
   double _appbarOpacity = 0.0;
-  ProductList productList = ProductList.init();
+  List<Product> productList = [];
   List<Product> currentProductList = [];
 
   void _appbarLeadingListener() {
@@ -43,70 +42,10 @@ class _StoreIndexState extends State<StoreIndex> {
     }
   }
 
-  List<Product> _allProductLists() {
-    return productList.alcohols +
-        productList.beverages +
-        productList.candys +
-        productList.frozens +
-        productList.ices +
-        productList.instants +
-        productList.instants +
-        productList.lifeuses +
-        productList.medics +
-        productList.mliks +
-        productList.noodles +
-        productList.onedates +
-        productList.snacks +
-        productList.tobaccos;
-  }
-
   void _setCurrentProductList(ProductCategory category) {
-    List<Product> pd = [];
-
-    switch (category) {
-      case ProductCategory.alcohols:
-        pd = productList.alcohols;
-        break;
-      case ProductCategory.beverages:
-        pd = productList.beverages;
-        break;
-      case ProductCategory.candys:
-        pd = productList.candys;
-        break;
-      case ProductCategory.frozens:
-        pd = productList.frozens;
-        break;
-      case ProductCategory.ices:
-        pd = productList.ices;
-        break;
-      case ProductCategory.instants:
-        pd = productList.instants;
-        break;
-      case ProductCategory.lifeuses:
-        pd = productList.lifeuses;
-        break;
-      case ProductCategory.medics:
-        pd = productList.medics;
-        break;
-      case ProductCategory.mliks:
-        pd = productList.mliks;
-        break;
-      case ProductCategory.noodles:
-        pd = productList.noodles;
-        break;
-      case ProductCategory.onedates:
-        pd = productList.onedates;
-        break;
-      case ProductCategory.snacks:
-        pd = productList.snacks;
-        break;
-      case ProductCategory.tobaccos:
-        pd = productList.tobaccos;
-        break;
-      default:
-        pd = _allProductLists();
-        break;
-    }
+    List<Product> pd = productList
+        .where((element) => element.category == category.toString())
+        .toList();
 
     setState(() {
       currentProductList = pd;
@@ -136,18 +75,13 @@ class _StoreIndexState extends State<StoreIndex> {
     _scrollController.addListener(_appbarOpacityListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ProductList pd = await context
+      List<Product> pd = await context
           .read<ProductApi>()
           .getProductByStoreId(widget.store.sid);
 
       setState(() {
         productList = pd;
-      });
-
-      List<Product> cpd = _allProductLists();
-
-      setState(() {
-        currentProductList = cpd;
+        currentProductList = pd;
       });
     });
   }

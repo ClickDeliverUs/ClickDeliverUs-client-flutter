@@ -1,9 +1,11 @@
+import 'package:cd_client/bloc/user_acoount_bloc.dart';
 import 'package:cd_client/screen/register.dart';
 import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/widget/molecules/auth_option_row.dart';
 import 'package:cd_client/widget/atoms/button/oAuth2_btn.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../util/constant/standard.dart';
 import 'login.dart';
 
@@ -27,14 +29,19 @@ class Index extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 180,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    OAuth2Btn(socialEnum: SocialEnum.kakao),
-                    OAuth2Btn(socialEnum: SocialEnum.google),
+                    OAuth2Btn(
+                      socialEnum: SocialEnum.kakao,
+                      onPressed: () {
+                        context.read<UserAccountBloc>().add(KakaoLoginEvent());
+                      },
+                    ),
+                    const OAuth2Btn(socialEnum: SocialEnum.google),
                   ],
                 ),
               ),

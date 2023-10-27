@@ -35,7 +35,7 @@ class ShowDrawer extends StatelessWidget {
                   alignment: Alignment.center,
                   child: const CircleAvatar(
                     radius: 60,
-                    backgroundImage: AssetImage("assets/images/store.jpeg"),
+                    backgroundImage: AssetImage("assets/images/darius.jpeg"),
                   ),
                 ),
                 const SizedBox(height: 5),

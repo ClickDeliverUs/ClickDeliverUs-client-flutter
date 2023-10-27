@@ -4,38 +4,33 @@ part 'user_account.g.dart';
 
 @JsonSerializable()
 class UserAccount {
-  final int uid;
-  final String userName;
-  final String nickName;
-  final String email;
-  final DateTime birth;
+  final String uuid;
+  final String name;
+  final String nickname;
+  final String id;
   final String address;
   final String tel;
-  final bool isAdult;
+  // final bool? isAdult;
   final String? accessToken;
   final String? refreshToken;
 
   UserAccount(
-      {required this.uid,
-      required this.userName,
-      required this.nickName,
-      required this.email,
-      required this.birth,
+      {required this.uuid,
+      required this.name,
+      required this.nickname,
+      required this.id,
       required this.address,
       required this.tel,
-      required this.isAdult,
       this.accessToken,
       this.refreshToken});
 
   UserAccount.init()
-      : uid = 0,
-        userName = "",
-        nickName = "",
-        email = "",
-        birth = DateTime.now(),
+      : uuid = "",
+        name = "",
+        nickname = "",
+        id = "",
         address = "",
         tel = "",
-        isAdult = false,
         accessToken = "",
         refreshToken = "";
 

@@ -1,5 +1,8 @@
-import 'package:cd_client/main.dart';
+import 'package:cd_client/bloc/user_acoount_bloc.dart';
+import 'package:cd_client/screen/home.dart';
+import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/util/helper/enum.dart';
+import 'package:cd_client/util/logget.dart';
 import 'package:cd_client/widget/molecules/auth_option_row.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
 import 'package:cd_client/widget/atoms/input/input_auth.dart';
@@ -7,8 +10,7 @@ import 'package:cd_client/widget/atoms/input/props/input_data.dart';
 import 'package:cd_client/widget/atoms/input/props/input_default.dart';
 import 'package:flutter/material.dart';
 import 'package:cd_client/util/constant/standard.dart';
-
-import 'home.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,18 +24,34 @@ class _LoginState extends State<Login> {
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _submitForm() {
-    // if (_formKey.currentState!.validate()) {
-    //   String id = _idController.text;
-    //   String password = _passwordController.text;
-    //   print('ID: $id');
-    //   print('Password: $password');
-    // }
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      String id = _idController.text;
+      String password = _passwordController.text;
 
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-        (route) => false);
+      context
+          .read<UserAccountBloc>()
+          .add(LoginEvent(id: id, password: password));
+
+      await Future.delayed(const Duration(seconds: 1));
+
+      if (!mounted) return;
+
+      if (context.read<UserAccountBloc>().state.isLoggedIn == true) {
+        CommonHelper.pushRemoveScreen(context, const Home());
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.read<UserAccountBloc>().state.isLoggedIn == true) {
+        CommonHelper.pushRemoveScreen(context, const Home());
+      }
+    });
   }
 
   @override
@@ -97,7 +115,9 @@ class _LoginState extends State<Login> {
                   height: 40,
                   textL: "아이디 찾기",
                   textR: "비밀번호 찾기",
-                  onPressedL: () {},
+                  onPressedL: () {
+                    CommonHelper.pushRemoveScreen(context, const Home());
+                  },
                   onPressedR: () {},
                 )
               ],

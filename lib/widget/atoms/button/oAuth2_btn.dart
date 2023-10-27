@@ -6,9 +6,9 @@ import '../../../util/helper/enum.dart';
 
 class OAuth2Btn extends StatefulWidget {
   final SocialEnum socialEnum;
-  // final VoidCallback onPressed;
+  final void Function()? onPressed;
 
-  const OAuth2Btn({super.key, required this.socialEnum});
+  const OAuth2Btn({super.key, required this.socialEnum, this.onPressed});
 
   @override
   State<OAuth2Btn> createState() => _OAuth2BtnState();
@@ -61,9 +61,7 @@ class _OAuth2BtnState extends State<OAuth2Btn> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: () {
-          print(widget.socialEnum);
-        },
+        onPressed: widget.onPressed,
         style: ElevatedButton.styleFrom(
             fixedSize: const Size(double.infinity, 50),
             shadowColor: Colors.transparent,

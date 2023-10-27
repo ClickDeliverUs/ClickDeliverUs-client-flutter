@@ -7,15 +7,33 @@ class UserAccountBloc extends Bloc<UserAccountEvent, UserAccountState> {
   final AuthApi authApi;
 
   UserAccountBloc({required this.authApi}) : super(InitUserAccountState()) {
-    on<UserAccountEvent>((event, emit) {
-      if (event is LoginEvent) _loginHandler(event, emit);
+    on<UserAccountEvent>((event, emit) async {
+      if (event is LoginEvent) {
+        await _loginHandler(event, emit);
+      } else if (event is KakaoLoginEvent) {
+        await _kakaoLogin(event, emit);
+      }
     });
   }
 
-  void _loginHandler(LoginEvent event, emit) async {
-    UserAccount account = await authApi.fetchLogin(event.id, event.password);
+  Future<void> _loginHandler(LoginEvent event, emit) async {
+    try {
+      UserAccount account = await authApi.fetchLogin(event.id, event.password);
 
-    emit(CurrentUserAccountState(userAccount: account));
+      emit(CurrentUserAccountState(userAccount: account, isLoggedIn: true));
+    } catch (err) {
+      // 로그인 실패 예외처리
+      emit(InitUserAccountState());
+      return;
+    }
+  }
+
+  Future<void> _kakaoLogin(KakaoLoginEvent event, emit) async {
+    try {
+      await authApi.fetchKakaoLogin();
+    } catch (e) {
+      print(e);
+    }
   }
 }
 
@@ -32,23 +50,31 @@ class LoginEvent extends UserAccountEvent {
   List<Object?> get props => [id, password];
 }
 
+class KakaoLoginEvent extends UserAccountEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 // state
 abstract class UserAccountState extends Equatable {
   final UserAccount userAccount;
+  final bool isLoggedIn;
 
-  const UserAccountState({required this.userAccount});
+  const UserAccountState({required this.userAccount, required this.isLoggedIn});
 }
 
 class CurrentUserAccountState extends UserAccountState {
-  const CurrentUserAccountState({required super.userAccount});
+  const CurrentUserAccountState(
+      {required super.userAccount, required super.isLoggedIn});
 
   @override
-  List<Object?> get props => [userAccount];
+  List<Object?> get props => [userAccount, isLoggedIn];
 }
 
 class InitUserAccountState extends UserAccountState {
-  InitUserAccountState() : super(userAccount: UserAccount.init());
+  InitUserAccountState()
+      : super(userAccount: UserAccount.init(), isLoggedIn: false);
 
   @override
-  List<Object?> get props => [userAccount];
+  List<Object?> get props => [userAccount, isLoggedIn];
 }

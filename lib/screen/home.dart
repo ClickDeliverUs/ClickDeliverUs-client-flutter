@@ -14,7 +14,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late KakaoMapController mapController;
   Set<Marker> markers = {};
   List<Store> stores = [];
 
@@ -41,20 +40,10 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text("Home"),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-          onPressed: () {
-            // pop screen
-          },
-        ),
       ),
       endDrawer: const ShowDrawer(),
       body: KakaoMap(
-        onMapCreated: ((controller) {
-          mapController = controller;
-
+        onMapCreated: (controller) {
           markers.add(Marker(
             markerId: UniqueKey().toString(),
             latLng: LatLng(37.459718915969816, 127.12671105754838),
@@ -71,7 +60,7 @@ class _HomeState extends State<Home> {
           ));
 
           setState(() {});
-        }),
+        },
         onMarkerTap: (markerId, latLng, zoomLevel) {
           int idx = markers
               .toList()
@@ -85,21 +74,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-//  Center(
-//         child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: List.generate(stores.length, (index) {
-//               return Padding(
-//                 padding: const EdgeInsets.symmetric(vertical: 10),
-//                 child: PrimaryBtn(
-//                   label: "편의점 $index",
-//                   onPressed: () {
-//                     _modalHandler(stores[index]);
-//                   },
-//                   widgetColor: WidgetColor.skyblue,
-//                   widgetSize: WidgetSize.big,
-//                 ),
-//               );
-//             })),
-//       ),

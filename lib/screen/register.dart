@@ -1,8 +1,10 @@
 import 'package:cd_client/model/extrenal/request/register_req.dart';
 import 'package:cd_client/apis/auth_api.dart';
+import 'package:cd_client/screen/login.dart';
 import 'package:cd_client/util/helper/common.dart';
 import 'package:cd_client/util/helper/enum.dart';
 import 'package:cd_client/util/helper/tel_format.dart';
+import 'package:cd_client/util/logget.dart';
 import 'package:cd_client/widget/atoms/button/btn_gender_toggle.dart';
 import 'package:cd_client/widget/atoms/button/btn_register_checker.dart';
 import 'package:cd_client/widget/atoms/button/primary_btn.dart';
@@ -15,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../util/constant/standard.dart';
-import '../main.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -172,7 +173,10 @@ class _RegisterState extends State<Register> {
         gender: _gender[0],
         isAdult: _checkAdult(_birth!));
 
-    context.read<AuthApi>().fetchRegister(registerReq);
+    context.read<AuthApi>().fetchRegister(registerReq).then((value) {
+      // TODO: alert modal appear
+      if (value) CommonHelper.pushRemoveScreen(context, const Login());
+    });
   }
 
   Widget containerTitle(String title) {
