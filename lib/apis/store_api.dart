@@ -9,7 +9,6 @@ class StoreApi {
 
   Future<List<Store>> fetchStoreList() async {
     Response response = await http.get(Uri.parse("$path/cvstore"));
-
     if (response.statusCode == 200) {
       List<dynamic> rawResult = jsonDecode(response.body);
 

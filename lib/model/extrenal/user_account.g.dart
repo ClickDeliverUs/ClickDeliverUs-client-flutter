@@ -8,11 +8,11 @@ part of 'user_account.dart';
 
 UserAccount _$UserAccountFromJson(Map<String, dynamic> json) => UserAccount(
       uuid: json['uuid'] as String,
-      name: json['name'] as String,
+      name: json['name'] as String?,
       nickname: json['nickname'] as String,
       id: json['id'] as String,
-      address: json['address'] as String,
-      tel: json['tel'] as String,
+      address: json['address'] as String?,
+      tel: json['tel'] as String?,
       accessToken: json['accessToken'] as String?,
       refreshToken: json['refreshToken'] as String?,
     );

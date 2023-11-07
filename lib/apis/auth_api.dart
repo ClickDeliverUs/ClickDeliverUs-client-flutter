@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'package:cd_client/exceptions/network_exception.dart';
-import 'package:cd_client/exceptions/request_canceled_exception.dart';
 import 'package:cd_client/model/extrenal/request/register_req.dart';
 import 'package:cd_client/model/extrenal/user_account.dart';
 import 'package:cd_client/util/logget.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -38,7 +36,7 @@ class AuthApi {
     }
   }
 
-  Future<void> fetchKakaoLogin() async {
+  Future<UserAccount> fetchKakaoLogin() async {
     bool isKakaoInstalled = await isKakaoTalkInstalled();
     OAuthToken oAuthToken;
 
@@ -46,9 +44,8 @@ class AuthApi {
       oAuthToken = isKakaoInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
-      print(oAuthToken.accessToken);
     } catch (e) {
-      print(e);
+      loggerNoStack.e(e);
       throw Error();
     }
 
@@ -58,9 +55,7 @@ class AuthApi {
     });
 
     if (response.statusCode == 201) {
-      UserAccount userAccount = UserAccount.fromJson(jsonDecode(response.body));
-
-      loggerNoStack.i(userAccount);
+      return UserAccount.fromJson(jsonDecode(response.body));
     } else {
       throw NetworkException();
     }

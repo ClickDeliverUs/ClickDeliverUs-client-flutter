@@ -5,22 +5,22 @@ part 'user_account.g.dart';
 @JsonSerializable()
 class UserAccount {
   final String uuid;
-  final String name;
+  final String? name;
   final String nickname;
   final String id;
-  final String address;
-  final String tel;
+  final String? address;
+  final String? tel;
   // final bool? isAdult;
   final String? accessToken;
   final String? refreshToken;
 
   UserAccount(
       {required this.uuid,
-      required this.name,
+      this.name,
       required this.nickname,
       required this.id,
-      required this.address,
-      required this.tel,
+      this.address,
+      this.tel,
       this.accessToken,
       this.refreshToken});
 

@@ -6,15 +6,15 @@ part 'product.g.dart';
 class Product {
   final int sId;
   final int menuId;
-  final String product;
-  final int count;
+  final String goodsName;
+  final int goodsCount;
   final String category;
 
   Product(
       {required this.sId,
       required this.menuId,
-      required this.product,
-      required this.count,
+      required this.goodsName,
+      required this.goodsCount,
       required this.category});
 
   factory Product.fromJson(Map<String, dynamic> json) =>

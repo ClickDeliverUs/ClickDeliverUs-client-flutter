@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   await dotenv.load();
-  AuthRepository.initialize(appKey: dotenv.env["KAKAO_NATIVE_KEY"]!);
+  AuthRepository.initialize(appKey: dotenv.env["KAKAO_MAP_KEY"]!);
   KakaoSdk.init(nativeAppKey: dotenv.env["KAKAO_NATIVE_KEY"]);
 
   runApp(const MyApp());

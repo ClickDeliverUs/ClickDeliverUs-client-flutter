@@ -24,15 +24,16 @@ class UserAccountBloc extends Bloc<UserAccountEvent, UserAccountState> {
     } catch (err) {
       // 로그인 실패 예외처리
       emit(InitUserAccountState());
-      return;
     }
   }
 
   Future<void> _kakaoLogin(KakaoLoginEvent event, emit) async {
     try {
-      await authApi.fetchKakaoLogin();
+      UserAccount account = await authApi.fetchKakaoLogin();
+
+      emit(CurrentUserAccountState(userAccount: account, isLoggedIn: true));
     } catch (e) {
-      print(e);
+      emit(InitUserAccountState());
     }
   }
 }

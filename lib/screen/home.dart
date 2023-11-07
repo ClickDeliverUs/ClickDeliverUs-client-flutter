@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text("편의점 검색"),
         centerTitle: true,
       ),
       endDrawer: const ShowDrawer(),

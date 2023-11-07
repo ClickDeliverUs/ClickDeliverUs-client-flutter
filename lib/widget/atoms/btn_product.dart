@@ -18,7 +18,7 @@ class ProductContainer extends StatelessWidget {
             color: CustomColor.whiteGrey,
             borderRadius: BorderRadius.circular(Standard.defaultBorderRadius)),
         child: Center(
-          child: Text(product.product),
+          child: Text(product.goodsName),
         ),
       ),
     );

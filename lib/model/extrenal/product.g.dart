@@ -9,15 +9,15 @@ part of 'product.dart';
 Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       sId: json['sId'] as int,
       menuId: json['menuId'] as int,
-      product: json['product'] as String,
-      count: json['count'] as int,
+      goodsName: json['goodsName'] as String,
+      goodsCount: json['goodsCount'] as int,
       category: json['category'] as String,
     );
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'sId': instance.sId,
       'menuId': instance.menuId,
-      'product': instance.product,
-      'count': instance.count,
+      'goodsName': instance.goodsName,
+      'goodsCount': instance.goodsCount,
       'category': instance.category,
     };
