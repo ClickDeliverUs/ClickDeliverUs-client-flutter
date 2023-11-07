@@ -2,6 +2,8 @@ import 'package:cd_client/apis/product_api.dart';
 import 'package:cd_client/apis/store_api.dart';
 import 'package:cd_client/bloc/user_acoount_bloc.dart';
 import 'package:cd_client/apis/auth_api.dart';
+import 'package:cd_client/providers/db_provider.dart';
+import 'package:cd_client/screen/chat.dart';
 import 'package:cd_client/screen/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,11 +12,16 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() async {
+init() async {
   await dotenv.load();
   AuthRepository.initialize(appKey: dotenv.env["KAKAO_MAP_KEY"]!);
   KakaoSdk.init(nativeAppKey: dotenv.env["KAKAO_NATIVE_KEY"]);
 
+  DbProvider().initDB();
+}
+
+void main() async {
+  await init();
   runApp(const MyApp());
 }
 
