@@ -2,19 +2,19 @@ enum SocialEnum { google, kakao, naver, apple, facebook }
 
 enum ProductCategory {
   all,
-  alcohols,
-  beverages,
-  candys,
-  frozens,
-  ices,
-  instants,
-  lifeuses,
-  medics,
-  mliks,
-  noodles,
-  onedates,
-  snacks,
-  tobaccos
+  alcohol,
+  beverage,
+  candy,
+  frozen,
+  ice,
+  instant,
+  lifeuse,
+  medic,
+  mlik,
+  noodle,
+  onedate,
+  snack,
+  tobacco
 }
 
 enum Route { login, register }

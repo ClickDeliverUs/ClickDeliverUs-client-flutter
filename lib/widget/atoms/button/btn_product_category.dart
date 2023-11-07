@@ -11,7 +11,7 @@ class BtnProductCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 90,
+      width: 100,
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: ElevatedButton(
           onPressed: onPressed,

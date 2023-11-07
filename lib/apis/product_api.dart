@@ -10,6 +10,7 @@ class ProductApi {
 
   Future<List<Product>> getProductByStoreId(int sid) async {
     Response response = await http.get(Uri.parse("$path/search/$sid"));
+
     if (response.statusCode == 200) {
       List<Product> result = (jsonDecode(response.body) as List<dynamic>)
           .map((v) => Product.fromJson(v))

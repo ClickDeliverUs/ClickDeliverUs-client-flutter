@@ -44,11 +44,12 @@ class _StoreIndexState extends State<StoreIndex> {
 
   void _setCurrentProductList(ProductCategory category) {
     List<Product> pd = productList
-        .where((element) => element.category == category.toString())
+        .where(
+            (element) => element.category == category.toString().split(".")[1])
         .toList();
 
     setState(() {
-      currentProductList = pd;
+      currentProductList = category == ProductCategory.all ? productList : pd;
     });
   }
 
@@ -195,77 +196,74 @@ class _StoreIndexState extends State<StoreIndex> {
                                 title: "주류",
                                 onPressed: () {
                                   _setCurrentProductList(
-                                      ProductCategory.alcohols);
+                                      ProductCategory.alcohol);
                                 }),
                             BtnProductCategory(
                                 title: "음료",
                                 onPressed: () {
                                   _setCurrentProductList(
-                                      ProductCategory.beverages);
+                                      ProductCategory.beverage);
                                 }),
                             BtnProductCategory(
                                 title: "사탕",
                                 onPressed: () {
-                                  _setCurrentProductList(
-                                      ProductCategory.candys);
+                                  _setCurrentProductList(ProductCategory.candy);
                                 }),
                             BtnProductCategory(
                                 title: "냉동식품",
                                 onPressed: () {
                                   _setCurrentProductList(
-                                      ProductCategory.frozens);
+                                      ProductCategory.frozen);
                                 }),
                             BtnProductCategory(
                                 title: "아이스크림",
                                 onPressed: () {
-                                  _setCurrentProductList(ProductCategory.ices);
+                                  _setCurrentProductList(ProductCategory.ice);
                                 }),
                             BtnProductCategory(
                                 title: "즉석식품",
                                 onPressed: () {
                                   _setCurrentProductList(
-                                      ProductCategory.instants);
+                                      ProductCategory.instant);
                                 }),
                             BtnProductCategory(
                                 title: "생활용품",
                                 onPressed: () {
                                   _setCurrentProductList(
-                                      ProductCategory.lifeuses);
+                                      ProductCategory.lifeuse);
                                 }),
                             BtnProductCategory(
                                 title: "의약품",
                                 onPressed: () {
-                                  _setCurrentProductList(
-                                      ProductCategory.medics);
+                                  _setCurrentProductList(ProductCategory.medic);
                                 }),
                             BtnProductCategory(
                                 title: "유제품",
                                 onPressed: () {
-                                  _setCurrentProductList(ProductCategory.mliks);
+                                  _setCurrentProductList(ProductCategory.mlik);
                                 }),
                             BtnProductCategory(
                                 title: "면류",
                                 onPressed: () {
                                   _setCurrentProductList(
-                                      ProductCategory.noodles);
+                                      ProductCategory.noodle);
                                 }),
                             BtnProductCategory(
                                 title: "즉석식품",
                                 onPressed: () {
                                   _setCurrentProductList(
-                                      ProductCategory.onedates);
+                                      ProductCategory.onedate);
                                 }),
                             BtnProductCategory(
                                 title: "과자류",
                                 onPressed: () {
-                                  _setCurrentProductList(
-                                      ProductCategory.snacks);
+                                  _setCurrentProductList(ProductCategory.snack);
                                 }),
                             BtnProductCategory(
                                 title: "담배",
                                 onPressed: () {
                                   _setCurrentProductList(
-                                      ProductCategory.tobaccos);
+                                      ProductCategory.tobacco);
                                 }),
                           ],
                         ),
