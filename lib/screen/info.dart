@@ -1,88 +1,135 @@
-import 'package:cd_client/util/constant/custom_color.dart';
 import 'package:flutter/material.dart';
 
 class Info extends StatefulWidget {
   const Info({super.key});
 
   @override
-  State<Info> createState() => _HomeState();
+  State<Info> createState() => _InfoState();
 }
 
-class _HomeState extends State<Info> {
+class _InfoState extends State<Info> {
+  String nickname = "Nick";
+  String birth = "2000-01-01";
+  String address = "1234567";
+  String email = "email@.mail.com";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Info"),
+        title: const Text("내 정보"),
         centerTitle: true,
-        backgroundColor: CustomColor.indigo,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
-      body: Column(
-        children: <Widget>[
-          const SizedBox(height: 30.0),
-          Row(
-            children: <Widget>[
-              Container(
-                width: 60,
-                height: 60,
-                color: Colors.grey,
-                margin: const EdgeInsets.all(20),
-              ),
-              const SizedBox(width: 10.0),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: Row(
                   children: <Widget>[
-                    Text(
-                      "Name",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
+                    Container(
+                      alignment: Alignment.center,
+                      child: const CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage("assets/images/darius.jpeg"),
                       ),
                     ),
-                    Text("uid"),
+                    const SizedBox(width: 50.0),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "NAME",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30.0,
+                            ),
+                          ),
+                          Text("@uid1234"),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 20.0),
-          ListTile(
-            title: const Text("Nickname"),
-            subtitle: const Text("Nick"),
-            trailing: const Icon(Icons.add),
-            onTap: () {},
-          ),
-          ListTile(
-            title: const Text("Email"),
-            subtitle: const Text("email@.mail.com"),
-            trailing: const Icon(Icons.add),
-            onTap: () {},
-          ),
-          ListTile(
-            title: const Text("Address"),
-            subtitle: const Text("1234567"),
-            trailing: const Icon(Icons.add),
-            onTap: () {},
-          ),
-          ListTile(
-            title: const Text("Birth"),
-            subtitle: const Text("2000-01-01"),
-            trailing: const Icon(Icons.add),
-            onTap: () {},
-          ),
-          ListTile(
-            title: const Text("Logout"),
-            onTap: () {},
-          ),
-        ],
+            ),
+            buildInfo("닉네임", nickname, onTap: () {
+              _showTextInputDialog("닉네임", nickname, (newText) {
+                setState(() {
+                  nickname = newText;
+                });
+              });
+            }),
+            buildInfo("생일", birth, onTap: () {
+              _showTextInputDialog("생일", birth, (newText) {
+                setState(() {
+                  birth = newText;
+                });
+              });
+            }),
+            buildInfo("주소", address, onTap: () {
+              _showTextInputDialog("주소", address, (newText) {
+                setState(() {
+                  address = newText;
+                });
+              });
+            }),
+            buildInfo("메일", email, onTap: () {
+              _showTextInputDialog("메일", email, (newText) {
+                setState(() {
+                  email = newText;
+                });
+              });
+            }),
+          ],
+        ),
       ),
     );
   }
+
+  void _showTextInputDialog(String title, String initialValue, Function(String) onTextSubmitted) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String newText = initialValue;
+        return AlertDialog(
+          title: Text(" $title "),
+          content: TextField(
+            onChanged: (text) {
+              newText = text;
+            },
+            controller: TextEditingController(text: initialValue),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("취소"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("저장"),
+              onPressed: () {
+                onTextSubmitted(newText);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+Widget buildInfo(String title, String subtitle, {onTap}) {
+  return Card(
+    child: ListTile(
+      title: Text(title),
+      subtitle: Text(subtitle),
+      onTap: onTap,
+    ),
+  );
 }

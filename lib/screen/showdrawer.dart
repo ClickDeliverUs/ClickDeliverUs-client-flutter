@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'info.dart';
+import 'mypage.dart';
+import 'deliver.dart';
 import 'index.dart';
 
 class ShowDrawer extends StatelessWidget {
@@ -44,14 +45,19 @@ class ShowDrawer extends StatelessWidget {
                 const Text("@id",
                     style: TextStyle(color: Colors.grey, fontSize: 20)),
                 const SizedBox(height: 30),
-                buildList(Icons.person_outline, "내 정보", () {
+                buildList(Icons.person_outline, "마이 페이지", () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Info()),
+                    MaterialPageRoute(builder: (context) => const MyPage()),
+                  );
+                }),
+                buildList(Icons.delivery_dining, "배달하기", () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Deliver()),
                   );
                 }),
                 buildList(Icons.star, "이벤트", () {}),
-                buildList(Icons.settings, "설정", () {}),
                 buildList(Icons.question_mark, "도움말", () {}),
                 buildList(
                   Icons.logout,
