@@ -4,6 +4,7 @@ import 'order_list.dart';
 import 'chat.dart';
 import 'index.dart';
 import 'info.dart';
+import 'setting.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
@@ -93,7 +94,12 @@ class _MyPageState extends State<MyPage> {
                     MaterialPageRoute(builder: (context) => const Chat()),
                   );
                 }),
-                _buildIconCard(Icons.settings, "설정", () {}),
+                _buildIconCard(Icons.settings, "설정", () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Setting()),
+                  );
+                }),
                 _buildIconCard(Icons.add, " ", () {}),
                 _buildIconCard(Icons.add, " ", () {}),
                 _buildIconCard(Icons.add, " ", () {}),
