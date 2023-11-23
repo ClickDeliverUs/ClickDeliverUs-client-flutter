@@ -45,8 +45,17 @@ class _ShoppingState extends State<Shopping> {
     if (shoppingItems[index].count > 0) {
       setState(() {
         shoppingItems[index].count--;
+        if (shoppingItems[index].count == 0) {
+          itemRemove(index);
+        }
       });
     }
+  }
+
+  void itemRemove(int index) {
+    setState(() {
+      shoppingItems.removeAt(index);
+    });
   }
 
   @override

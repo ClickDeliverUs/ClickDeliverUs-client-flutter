@@ -109,9 +109,6 @@ class _DeliverState extends State<Deliver> {
                   child: Column(
                     children: <Widget>[
                       GestureDetector(
-                        onTap: () {
-                          _showDeliver(product);
-                        },
                         child: ListTile(
                           title: Text(
                             product.name,

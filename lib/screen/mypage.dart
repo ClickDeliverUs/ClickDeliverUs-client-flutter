@@ -107,30 +107,19 @@ class _MyPageState extends State<MyPage> {
             )
           ),
           TertiaryBtn(
-            label: "로그아웃",
+            label: "test",
             onPressed: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text("로그아웃"),
+                    title: const Text("Test"),
                     actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Index(),
-                            ),
-                          );
-                        },
-                        child: const Text("예"),
-                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text("아니오"),
+                        child: const Text("확인"),
                       ),
                     ],
                   );
